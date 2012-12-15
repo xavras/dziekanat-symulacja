@@ -29,7 +29,7 @@ public class PowtorneWywolanieEvent extends Event<Okienko> {
 		Dziekanat mojModel = (Dziekanat)getModel();
 
         Student p = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first();
-        mojModel.getPodajnikBloczkow().wyslijTraceAutomat(okno.getAktualnyStudent().getNumer() + " numer ponownie proszony do okienka: " + okno.getName());    
+        mojModel.getPodajnikBloczkow().wyslijTrace(okno.getAktualnyStudent().getNumer() + " numer ponownie proszony do okienka: " + okno.getName());    
         
         //sprawdzenie czy petenta zostanie obsluzony
         if (p.getCzasPodchodzeniaStudenta() < 30){

@@ -11,13 +11,13 @@ import desmoj.core.simulator.SimTime;
  * @author Kachat j.W.
  */
 public class Automat extends Entity {
+        public final static int iloscKierunkow = 4;
     
 	protected final int maxStudentow = 50;
         protected static int maxStudentowKierunek = 20;
 	protected HTMLTraceOutput trace = new HTMLTraceOutput();
-	protected HTMLTraceOutput traceAutomat = new HTMLTraceOutput();
-	//licznik petentow w wydzialach: 0 - Wydzial Administracji 1 - Wydzial Pojazdow  2 - Wydzial podatkow
-	protected static int licznikStudentowZKierunku[] = new int[4];
+	//licznik petentow do okienek: 0 - Elektrotechnika 1 - AiR  2 - Stosowana 3 - Inż. Biomedyczna
+	protected static int licznikStudentowZKierunku[] = new int[iloscKierunkow];
 	/**	 
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej i ustalajacy sciezke trace'a
 	 *  
@@ -29,7 +29,6 @@ public class Automat extends Entity {
 		super(wlasciciel, nazwa, pokazTrace);		
 
 		trace.open("traces/", "Automat");
-		traceAutomat.open("traces/", "Automat");
 	}
 	/**
 	 * Dodaje petenta do kolejek (petent pobiera bloczek)
@@ -49,8 +48,9 @@ public class Automat extends Entity {
 				//liczenie szacowanego czasu oczekiwania = (sr_okres_czekania) * ilosc_osob_w_kolejce
 				double szacowanyCzasOczekiwania = ((mojModel.getMinCzasObslugi() + mojModel.getMaxCzasObslugi()) / 2) * mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).length();
 				student.setNumer(licznikStudentowZKierunku[student.getKierunek()]++);
-				trace.receive(new TraceNote(getModel(), "Stduent " + student.getId() + " o " + presentTime() + "\n szacowany czas oczekiwania: " + szacowanyCzasOczekiwania + "min\n liczba osob w kolejce: " + mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).length(), presentTime(), this, null));
-				
+				trace.receive(new TraceNote(getModel(), "Student " + student.getId() + " o " + presentTime() + "\n szacowany czas oczekiwania: " + szacowanyCzasOczekiwania + "min\n liczba osob w kolejce: " + mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).length(), presentTime(), this, null));
+                                wyslijTrace("Student " + student.getId() + " otrzymal numerek: " + student.getNumer() + ", do okienka nr: " + student.getKierunek());        
+                                
 				PrzybycieStudentaEvent przybycieStudenta = new PrzybycieStudentaEvent(mojModel, "Przybycie Petenta", true);
 				przybycieStudenta.schedule(student, new SimTime(0.0));
 			}else{
@@ -71,25 +71,11 @@ public class Automat extends Entity {
     {
         trace.receive(new TraceNote(getModel(), note, presentTime(), this, null));
     }
-	/**
-	 * Wysyla Stringa z aktualnym czasem do trace'a Automatu wyswietlajacego numerki, o sciezce zdefiniowanej w folderze "/treces/Automat"
-	 * 
-	 * @param note - String, ktory zostanie zapisany do trace'a
-	 */
-    public void wyslijTraceAutomat(String note)
-    {
-        traceAutomat.receive(new TraceNote(getModel(), note, presentTime(), this, null));
-    }
+    
     /**
      * Zamyka aktywnego trace'a
      */
     public void zamknijTrace(){
     	trace.close();
-    }
-    /**
-     * Zamyka aktywnego trace'a Automatu
-     */
-    public void zamknijTraceAutomat(){
-    	traceAutomat.close();
     }
 }

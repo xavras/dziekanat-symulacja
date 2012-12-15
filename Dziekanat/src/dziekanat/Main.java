@@ -2,7 +2,6 @@ package dziekanat;
 
 import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.SimTime;
-import java.io.File;
 
 
 /**

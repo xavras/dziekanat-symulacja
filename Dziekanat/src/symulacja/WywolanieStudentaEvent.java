@@ -29,7 +29,7 @@ public class WywolanieStudentaEvent extends Event<Okienko> {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
 		Student student = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first();
-		mojModel.getPodajnikBloczkow().wyslijTraceAutomat(okno.getAktualnyStudent().getNumer() + " numer proszony do okienka: " + okno.getName());        
+		mojModel.getPodajnikBloczkow().wyslijTrace(okno.getAktualnyStudent().getNumer() + " numer proszony do okienka: " + okno.getName());        
                 okno.setAktualnyStudent(student);
            
        	if (student.getCzasPodchodzeniaStudenta() < 15){

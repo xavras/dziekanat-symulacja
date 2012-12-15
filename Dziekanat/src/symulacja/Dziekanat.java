@@ -209,6 +209,5 @@ public class Dziekanat extends Model {
 		for (int i = 0; i < okienka.size(); i++)
 			okienka.get(i).zamknijTrace();
 		podajnikBloczkow.zamknijTrace();
-		podajnikBloczkow.zamknijTraceAutomat();
 	}
 } 
