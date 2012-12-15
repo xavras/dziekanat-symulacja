@@ -10,6 +10,8 @@ import desmoj.core.simulator.SimTime;
  * @author Kachat j.W.
  */
 public class StudentGeneratorEvent extends ExternalEvent {
+    
+        private Student przychodzacyStudent = null;
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
 	 * 
@@ -20,14 +22,36 @@ public class StudentGeneratorEvent extends ExternalEvent {
 	public StudentGeneratorEvent(Model wlasciciel, String nazwa, boolean pokazTrace) {
 		super(wlasciciel, nazwa, pokazTrace);
 	}
+                
+        /**
+         * Alternatywny konstruktor
+         * @param wlasciciel
+         * @param nazwa
+         * @param pokazTrace
+         * @param student student, który się zjawia kolejny raz
+         */
+        public StudentGeneratorEvent(Model wlasciciel, String nazwa, boolean pokazTrace, Student student)
+        {
+            super(wlasciciel, nazwa, pokazTrace);
+            student.wyslijTrace("Student przychodzi kolejny raz.");
+            przychodzacyStudent = student;
+        }
     /**
      * Rutynowe dzialanie generowanie petenta
      * 
      */
+    @Override
 	public void eventRoutine() {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
-		mojModel.getPodajnikBloczkow().dodajStudenta(new Student(mojModel, "Student", true));
-		schedule(new SimTime(mojModel.getCzasPrzybyciaStudenta()));
+                if(przychodzacyStudent == null)//jeśli pojawia się nowy student
+                {
+                    mojModel.getPodajnikBloczkow().dodajStudenta(new Student(mojModel, "Student", true));
+                    schedule(new SimTime(mojModel.getCzasPrzybyciaStudenta()));
+                }
+                else//student przychodzi kolejny raz, wywołany został konstruktor ze studentem
+                {
+                    mojModel.getPodajnikBloczkow().dodajStudenta(przychodzacyStudent);
+                }
 	}
 }

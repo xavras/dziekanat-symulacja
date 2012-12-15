@@ -20,6 +20,7 @@ public class PrzybycieStudentaEvent extends Event<Student> {
 	public PrzybycieStudentaEvent(Model wlasciciel, String nazwa, boolean pokazTrace) {
 		super(wlasciciel, nazwa, pokazTrace);
 	}
+
 	/**
 	 * Rutynowe dzialanie  wywolania studenta
 	 * 
