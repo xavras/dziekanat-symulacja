@@ -18,6 +18,7 @@ public class StudentDoDziekana extends Entity{
     private int czasTolerancji; //czas jaki student jest w stanie czekac zanim sie zniecierpliwi
     public static int licznikStudentow = 0;
     private int id;
+    public static double czasPodchodzenia;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     

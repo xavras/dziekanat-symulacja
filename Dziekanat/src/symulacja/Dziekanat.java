@@ -7,6 +7,8 @@ import desmoj.core.simulator.*;
 import desmoj.core.dist.*;
 
 import java.util.LinkedList;
+import symulacja.dziekan.Dziekan;
+import symulacja.dziekan.StudentDoDziekana;
 
 /**
  * To jest klasa z modelem Urzedu Miasta. Jest to glowna klasa modelu zdarzeniowego.
@@ -29,9 +31,11 @@ public class Dziekanat extends Model {
     protected static double maxCzasObslugi = 5.0;
     
     //listy podan do dziekana oczekujacych na podpisanie i podpisanych
-    LinkedList<Integer> podaniaLista;
-    LinkedList<Integer> gotowePodaniaLista; 
+    public LinkedList<Integer> podaniaLista;
+    public LinkedList<Integer> gotowePodaniaLista; 
     
+    public Queue<StudentDoDziekana> kolejkaDziekan;
+    public Dziekan dziekan;
   
 	//Kolejka reprezentujace klientow oczekujacych do:
 	//0 - Wydzial Administracji 1 - Wydzial Pojazdow  2 - Wydzial podatkow
@@ -118,6 +122,8 @@ public class Dziekanat extends Model {
      		wolneOkienka[3].get(i).ustawSciezke("IB");
      		okienka.insert(wolneOkienka[3].get(i));
      	}
+        
+        dziekan = new Dziekan(getModel(), getModel().getName(), true);
 		
 	}
 	/**
