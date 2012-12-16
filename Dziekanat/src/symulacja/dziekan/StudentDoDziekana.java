@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symulacja;
+package symulacja.dziekan;
 import java.util.Random;
 import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
