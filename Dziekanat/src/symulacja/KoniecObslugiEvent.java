@@ -9,7 +9,7 @@ import desmoj.core.simulator.SimTime;
  * 
  * @author Kachat j.W.
  */
-public class KoniecObslugiEvent extends Event<Okienko> {
+public class KoniecObslugiEvent extends Event<PracownikDziekanatu> {
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
 	 * 
@@ -25,27 +25,44 @@ public class KoniecObslugiEvent extends Event<Okienko> {
      * 
      * @param okno - okienko wydzialu do ktorego podszedl petent
      */
-	public void eventRoutine(Okienko okno) {
+	public void eventRoutine(PracownikDziekanatu okno) {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
 		okno.getAktualnyStudent().wyslijTrace("Odszedlem o:" + presentTime());
 		okno.getAktualnyStudent().zamknijTrace();
 		
-		okno.wyslijTrace("Petetnt: " + okno.getAktualnyStudent().getId() + " odszedl");
+		okno.wyslijTrace("Student: " + okno.getAktualnyStudent().getId() + " odszedl");
 		okno.setAktualnyStudent(null);
 
 		//sprawdzenie, czy kolejejka do petentow do wydzialu tego okna jest nie pusta
 		//jesli nie jest: uruchomienie procedury wywolywanie petenta; jesli jest to dodanie okna do oczekujacych okienek
-		if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
-		{
+		
+                //jesli sa do zalatwienia jakies sprawy pozastudenckie
+                if(!mojModel.getSprawyPozastudenckieKolejka().isEmpty()){
+                    //pracownik dziekanatu zajmuje sie nimi
+                    okno.setAktualnyStudent(null);
+                    
+                    okno.setAktualnaSprawa(mojModel.getSprawyPozastudenckieKolejka().first());
+                    
+                    
+                    ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
+                    event.schedule(okno, new SimTime(0.0));
+                }
+                else{//jesli nie ma spraw pozastudenckich do zalatwienia
+                
+                    if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
+                    {
 			
 			okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
 			WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie petenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
 			event.schedule(okno, new SimTime(0.0));
-		}
-		else {
+                    }
+                    else {
+                    
+                        
 			mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
-		}
+                    }
+                }
 
 	}
 }

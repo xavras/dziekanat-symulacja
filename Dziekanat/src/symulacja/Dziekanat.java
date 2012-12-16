@@ -26,26 +26,32 @@ public class Dziekanat extends Model {
     protected static int NUM_OK_IB = 1;
     protected RealDistExponential czasPrzybyciaStudenta;
 	protected static double czasPrzybyciaStudentaDouble = 0.5;
+        
+    protected RealDistExponential czasNowejSprawyPozastudenckiej;
+    protected static double czasNowejSprawyPozastudenckiejDouble = 5;
+        
     protected RealDistUniform czasObslugi;
-	protected static double minCzasObslugi = 2.0;
+    protected static double minCzasObslugi = 2.0;
     protected static double maxCzasObslugi = 5.0;
     
     //listy podan do dziekana oczekujacych na podpisanie i podpisanych
     public LinkedList<Integer> podaniaLista;
     public LinkedList<Integer> gotowePodaniaLista; 
-    
+      
     public Queue<StudentDoDziekana> kolejkaDziekan;
     public Dziekan dziekan;
+    
+    public Queue<SprawyPozastudenckie> sprawyPozastudenckieKolejka ;
   
 	//Kolejka reprezentujace klientow oczekujacych do:
 	//0 - Wydzial Administracji 1 - Wydzial Pojazdow  2 - Wydzial podatkow
 	protected Queue<Student>[] studentKolejka = new Queue[4];
 	
     //Kolejka reprezentujaca wolnych urzednikow w okienkach, odpowiednio:
-	//0 - Wydzial Administracji 1 - Wydzial Pojazdow  2 - Wydzial podatkow
-	protected Queue<Okienko>[] wolneOkienka = new Queue[4];
+	//0-3 poszczegolne kierunki
+	protected Queue<PracownikDziekanatu>[] wolneOkienka = new Queue[4];
 	//Kolejka trzymajaca wszystkie okienka
-	protected Queue<Okienko> okienka;
+	protected Queue<PracownikDziekanatu> okienka;
 	protected Automat podajnikBloczkow;
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
@@ -68,12 +74,17 @@ public class Dziekanat extends Model {
 	 * Uruchamia zdarzenie generatora studentow
 	 */
 	public void doInitialSchedules() {
-		StudentGeneratorEvent generatorPetentow = new StudentGeneratorEvent(this, "PetentGenerator", true);
-		generatorPetentow.schedule(new SimTime(0.0));
+		StudentGeneratorEvent generatorStudentow = new StudentGeneratorEvent(this, "StudentGenerator", true);
+		generatorStudentow.schedule(new SimTime(0.0));
+                
+                SprawyPozastudenckieGeneratorEvent generatorSpraw = new SprawyPozastudenckieGeneratorEvent(this,"PetentGenerator", true);
+                generatorSpraw.schedule(new SimTime(0.0));
                 
                 podaniaLista = new LinkedList();
                 gotowePodaniaLista = new LinkedList();
-	}
+	
+                
+        }
 	/**
 	 * Inicjalizuje podstawowe elementy symulacji pracy Urzedu Miasta
 	 */
@@ -84,41 +95,46 @@ public class Dziekanat extends Model {
 		czasObslugi= new RealDistUniform(this, "czasObslugiStrumien", minCzasObslugi, maxCzasObslugi, true, false);
 		czasPrzybyciaStudenta= new RealDistExponential(this, "czasPrzybyciaPetentaStrumien", czasPrzybyciaStudentaDouble, true, false);
 		czasPrzybyciaStudenta.setNonNegative(true);
+               
+                czasNowejSprawyPozastudenckiej = new RealDistExponential(this, "czasNowejSprawyStruien", czasNowejSprawyPozastudenckiejDouble, true, false);
+                czasNowejSprawyPozastudenckiej.setNonNegative(true);
 		
+                sprawyPozastudenckieKolejka =new Queue<SprawyPozastudenckie>(this, "sprawyPozastudKolejka", true, true);
+                
 		studentKolejka[0] = new Queue<Student>(this, "Kolejka studentow do okienka dla Elektrotechniki", true, true);
 		studentKolejka[1] = new Queue<Student>(this, "Kolejka studentow do okienka dla Automatyki i Robotyki", true, true);
 		studentKolejka[2] = new Queue<Student>(this, "Kolejka studentow do okienka dla Inf.Stosowanej", true, true);
                 studentKolejka[3] = new Queue<Student>(this, "Kolejka studentow do okienka dla Inż.Biomedycznej", true, true);
 
-        wolneOkienka[0] = new Queue<Okienko>(this, "Kolejka okienek Elektrotechniki", true, true);
-        wolneOkienka[1] = new Queue<Okienko>(this, "Kolejka okienek Automatyki i Robotyki", true, true);
-        wolneOkienka[2] = new Queue<Okienko>(this, "Kolejka okienek Inf.Stosowanej", true, true);
-        wolneOkienka[3] = new Queue<Okienko>(this, "Kolejka okienek Inż.Biomedycznej", true, true);
+        wolneOkienka[0] = new Queue<PracownikDziekanatu>(this, "Kolejka okienek Elektrotechniki", true, true);
+        wolneOkienka[1] = new Queue<PracownikDziekanatu>(this, "Kolejka okienek Automatyki i Robotyki", true, true);
+        wolneOkienka[2] = new Queue<PracownikDziekanatu>(this, "Kolejka okienek Inf.Stosowanej", true, true);
+        wolneOkienka[3] = new Queue<PracownikDziekanatu>(this, "Kolejka okienek Inż.Biomedycznej", true, true);
           
-        okienka = new Queue<Okienko>(this, "Kolejka Okienek", false, false);
+        okienka = new Queue<PracownikDziekanatu>(this, "Kolejka Okienek", false, false);
 
 		// wkladamy okienka odpowiednych wydzialow do odpowiednich kolejek
 		for (int i = 0; i < NUM_OK_E ; i++){
 			// stworz nowe okienko i umiesc je w kolejce 
-			wolneOkienka[0].insert(new Okienko(this, "Elektrotechnika", true, 0));
+			wolneOkienka[0].insert(new PracownikDziekanatu(this, "Elektrotechnika", true, 0));
 			wolneOkienka[0].get(i).ustawSciezke("Elektrotechnika");
 			okienka.insert(wolneOkienka[0].get(i));
 		}
 		
 		for (int i = 0; i < NUM_OK_AIR ; i++){	
-			wolneOkienka[1].insert(new Okienko(this, "AiR", true, 1));
+			wolneOkienka[1].insert(new PracownikDziekanatu(this, "AiR", true, 1));
 			wolneOkienka[1].get(i).ustawSciezke("AiR");
 			okienka.insert(wolneOkienka[1].get(i));
 		}
 
      	for (int i = 0; i < NUM_OK_IS ; i++){
-     		wolneOkienka[2].insert(new Okienko(this, "IS", true, 2));
+     		wolneOkienka[2].insert(new PracownikDziekanatu(this, "IS", true, 2));
      		wolneOkienka[2].get(i).ustawSciezke("IS");
      		okienka.insert(wolneOkienka[2].get(i));
      	}
         
         for (int i = 0; i < NUM_OK_IB ; i++){
-     		wolneOkienka[3].insert(new Okienko(this, "IB", true, 3));
+     		wolneOkienka[3].insert(new PracownikDziekanatu(this, "IB", true, 3));
      		wolneOkienka[3].get(i).ustawSciezke("IB");
      		okienka.insert(wolneOkienka[3].get(i));
      	}
@@ -143,15 +159,26 @@ public class Dziekanat extends Model {
 	 * @param i - indeks kierunku
 	 * @return kolejka do okienka dla danego kierunku
 	 */
+        
+        
+        public double getCzasNowejSprawyPozastudenckiej(){
+            return czasNowejSprawyPozastudenckiej.sample();
+        }
+        
+        
     public Queue<Student> getPetentKolejkaDoKierunku(int i) {
 		return studentKolejka[i];
 	}
+    
+    public Queue<SprawyPozastudenckie> getSprawyPozastudenckieKolejka(){
+        return sprawyPozastudenckieKolejka;
+    }
     /**
      * 
      * @param i- indeks wydzialu
      * @return wolne okienka wydzialu
      */
-	public Queue<Okienko> getWolneOkienkaKierunku(int i) {
+	public Queue<PracownikDziekanatu> getWolneOkienkaKierunku(int i) {
 		return wolneOkienka[i];
 	}
 	/**
@@ -211,6 +238,15 @@ public class Dziekanat extends Model {
             
             
         }
+        
+        public void dodajSprawe(SprawyPozastudenckie spr){
+		
+		spr.wyslijTrace("Nowa sprawa o godz: " + presentTime());
+                
+                sprawyPozastudenckieKolejka.insert(spr);
+		spr.zamknijTrace();
+                
+	}
 	public void zamknijTrace(){
 		for (int i = 0; i < okienka.size(); i++)
 			okienka.get(i).zamknijTrace();

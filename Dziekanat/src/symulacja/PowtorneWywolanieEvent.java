@@ -9,7 +9,7 @@ import desmoj.core.simulator.SimTime;
  * 
  * @author Kachat j.W.
  */
-public class PowtorneWywolanieEvent extends Event<Okienko> {
+public class PowtorneWywolanieEvent extends Event<PracownikDziekanatu> {
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
 	 * 
@@ -25,7 +25,7 @@ public class PowtorneWywolanieEvent extends Event<Okienko> {
 	 * 
      * @param okno - okno, ktore oczekuje petenta
      */
-	public void eventRoutine(Okienko okno) {
+	public void eventRoutine(PracownikDziekanatu okno) {
 		Dziekanat mojModel = (Dziekanat)getModel();
 
         Student p = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first();

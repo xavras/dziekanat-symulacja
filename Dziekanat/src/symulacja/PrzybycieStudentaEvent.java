@@ -33,7 +33,7 @@ public class PrzybycieStudentaEvent extends Event<Student> {
 		
 		//sprawdzenie czy jest wolne okienko
 		if (!mojModel.getWolneOkienkaKierunku(student.getKierunek()).isEmpty()){
-			Okienko okno = mojModel.getWolneOkienkaKierunku(student.getKierunek()).first();
+			PracownikDziekanatu okno = mojModel.getWolneOkienkaKierunku(student.getKierunek()).first();
 			mojModel.getWolneOkienkaKierunku(student.getKierunek()).remove(okno);
 			okno.setAktualnyStudent(student);
 			

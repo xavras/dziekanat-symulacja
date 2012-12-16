@@ -1,6 +1,7 @@
 package symulacja;
 
 import java.io.File;
+import java.util.LinkedList;
 import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
 import desmoj.core.simulator.Entity;
@@ -10,11 +11,16 @@ import desmoj.core.simulator.Model;
  * 
  * @author Kachat j.W.
  */
-public class Okienko extends Entity {
-	protected Student aktualnyStudent;
-	//0-ADM 1-POJAZDY 2-PODATKI
-	protected int kierunek;
+public class PracownikDziekanatu extends Entity {
+	
+    protected Student aktualnyStudent;
+    protected SprawyPozastudenckie aktualnaSprawa;
+	//0-E 1-AIR 2-IS 3-IB
+	protected int obslugiwanyKierunek;
 	protected HTMLTraceOutput trace = new HTMLTraceOutput();
+        
+        
+        
 	/**	 
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej i przypisujacy okienko do odpowiedniego kierunku
 	 *  0 - E 1- AIR 2- IS 3-IB
@@ -24,15 +30,24 @@ public class Okienko extends Entity {
 	 * @param pokazTrace - czy zdarzenie ma byc sledzone
 	 * @param wydzial - wydzial do ktorego przypisane jest okno
 	 */
-	public Okienko(Model wlasciciel, String nazwa, boolean pokazTrace, int kierunek) {
+	public PracownikDziekanatu(Model wlasciciel, String nazwa, boolean pokazTrace, int kierunek) {
 		super(wlasciciel, nazwa, pokazTrace);		
-		this.kierunek = kierunek;
+		this.obslugiwanyKierunek = kierunek;
+
 	}
 
+        
 	/**
 	 * 
 	 * @return zwraca aktualnego petenta przy okienku
 	 */
+        public SprawyPozastudenckie getAktualnaSprawa(){
+            return this.aktualnaSprawa;
+        }
+        
+        public void setAktualnaSprawa(SprawyPozastudenckie sprawa){
+            this.aktualnaSprawa = sprawa;
+        }
 	public Student getAktualnyStudent() {
 		return this.aktualnyStudent;
 	}
@@ -48,7 +63,7 @@ public class Okienko extends Entity {
 	 * @return zwraca wydzial, do ktorego nalezy okienko
 	 */
 	public int getKierunek(){
-		return kierunek;
+		return obslugiwanyKierunek;
 	}
 	/**
 	 * Ustawia sciezke zapisu trace'a
