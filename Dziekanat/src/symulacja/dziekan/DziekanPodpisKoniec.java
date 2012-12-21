@@ -8,6 +8,6 @@ package symulacja.dziekan;
  *
  * @author lukasz
  */
-public class DziekanPodpisywanieEvent {
+public class DziekanPodpisKoniec {
     
 }

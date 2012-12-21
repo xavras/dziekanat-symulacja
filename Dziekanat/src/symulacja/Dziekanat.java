@@ -8,7 +8,7 @@ import desmoj.core.dist.*;
 
 import java.util.LinkedList;
 import symulacja.dziekan.Dziekan;
-import symulacja.dziekan.StudentDoDziekana;
+import symulacja.student_do_dziekana.StudentDoDziekana;
 
 /**
  * To jest klasa z modelem Urzedu Miasta. Jest to glowna klasa modelu zdarzeniowego.

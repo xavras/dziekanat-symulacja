@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symulacja.dziekan;
+package symulacja.student_do_dziekana;
 
 import desmoj.core.simulator.Event;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimTime;
 import symulacja.Dziekanat;
+import symulacja.dziekan.DziekanObslugaPoczatekEvent;
 
 /**
  *
@@ -24,18 +25,20 @@ public class StudentDoDziekanaPrzyjscieEvent extends Event<StudentDoDziekana>{
         Dziekanat mojModel = (Dziekanat)getModel();
         
         student.wyslijTrace("Przyszedlem do dziekana");
+        mojModel.kolejkaDziekan.insert(student);
                     
         if(mojModel.kolejkaDziekan.isEmpty() && mojModel.dziekan.isObecny() 
                 && !mojModel.dziekan.isZajety())//nikogo nie ma w kolejce, wymuszenie obslugi
         {
-            DziekanObslugaEvent dziekanObsluga = 
-                    new DziekanObslugaEvent(getModel(), getModel().getName(), traceIsOn());
+            DziekanObslugaPoczatekEvent dziekanObsluga = 
+                    new DziekanObslugaPoczatekEvent(getModel(), getModel().getName(), traceIsOn());
             dziekanObsluga.schedule(mojModel.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia/60.0));
-            student.wyslijTrace("Wszedlem od razu");
+            student.wyslijTrace("Wszedlem od razu, bez kolejki");
         }
-        
-        mojModel.kolejkaDziekan.insert(student);
-        student.wyslijTrace("Musze poczekac");
+        else
+        {
+            student.wyslijTrace("Musze poczekac");
+        }
     }
     
 }

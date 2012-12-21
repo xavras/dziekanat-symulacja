@@ -4,6 +4,7 @@
  */
 package symulacja.dziekan;
 
+import symulacja.student_do_dziekana.StudentDoDziekana;
 import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
 import desmoj.core.simulator.Entity;
@@ -15,7 +16,7 @@ import desmoj.core.simulator.Model;
  */
 public class Dziekan extends Entity{
     
-    private StudentDoDziekana aktualnyStudent;
+    public StudentDoDziekana aktualnyStudent;
     public static double godzinaRozpoczecia;
     public static double godzinaZakonczenia;
     private boolean zajety;
@@ -44,15 +45,19 @@ public class Dziekan extends Entity{
            trace.close();
     }
 
-    public StudentDoDziekana getAktualnyStudent() {
-        return aktualnyStudent;
-    }
-
     public boolean isZajety() {
         return zajety;
     }
 
     public boolean isObecny() {
         return obecny;
+    }
+
+    public void setZajety(boolean zajety) {
+        this.zajety = zajety;
+    }
+
+    public void setObecny(boolean obecny) {
+        this.obecny = obecny;
     }
 }

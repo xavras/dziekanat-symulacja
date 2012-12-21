@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symulacja.dziekan;
+package symulacja.student_do_dziekana;
 import java.util.Random;
 import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
@@ -19,6 +19,7 @@ public class StudentDoDziekana extends Entity{
     public static int licznikStudentow = 0;
     private int id;
     public static double czasPodchodzenia;
+    public static double czasGeneracji;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     
