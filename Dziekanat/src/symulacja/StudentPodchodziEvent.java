@@ -42,7 +42,9 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                         break;
                     case 1: //zlozenie podania
                             // wrzucamy podanie na liste podan niepodpisanych; nr podania = id_studenta (1 student 1 podanie dla uproszczenia)
-                            mojModel.zlozeniePodania(student.getId());
+                            //mojModel.zlozeniePodania(student.getId());
+                            //lukasz: tu bedzie moja listaPodan
+                            mojModel.listaPodan.addPodanie(student.getId());
                             student.setSprawa(2); //teraz student bedzie chcial odebrac podanie
                             //student po kilku dniach powraca do dziekanatu
                             student.wyslijTrace("zlozylem podanie");
@@ -52,7 +54,8 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                         
                         break;
                     case 2: //sprawdzenie czy podanie jest podpisane
-                            if(mojModel.odbiorPodania(student.getId())){
+                            if(mojModel.listaPodan.isPodpisaneAndGet(student.getId()))
+                            {
                                 //student idzie do domu zadowoolny
                                 student.wyslijTrace("odebralem podanie, odchodze");
                             }

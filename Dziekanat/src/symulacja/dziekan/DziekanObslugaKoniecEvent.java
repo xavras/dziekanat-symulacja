@@ -28,7 +28,7 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
         Dziekanat model = (Dziekanat) this.getModel();
         
         dziekan.wyslijTrace("Koncze obsluge studenta "+dziekan.aktualnyStudent.getId());
-        dziekan.aktualnyStudent.wyslijTrace("Jestem obslugiwany przez Dziekana"); 
+        dziekan.aktualnyStudent.wyslijTrace("Zostalem obsluzony przez Dziekana"); 
 
         Random random = new Random();
         if(random.nextInt(10) > 0)//szansa 90% na pozytywna decyzje
@@ -50,8 +50,13 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
         
         if(dziekan.isObecny())
         {
-            //if(cos jest do podpisania) wywolaj event poczatek podpisywania
-            /*else */if(!model.kolejkaDziekan.isEmpty())//ktos jest w kolejce, wiec go wywolam
+            if(!model.listaPodan.isEmpty()) //wywolaj event poczatek podpisywania
+            {
+                DziekanPodpisPoczatekEvent event =
+                    new DziekanPodpisPoczatekEvent(model, getModel().getName(), true);
+                event.schedule(dziekan, new SimTime(0.0));
+            }
+            else if(!model.kolejkaDziekan.isEmpty())//ktos jest w kolejce, wiec go wywolam
             {
                 DziekanObslugaPoczatekEvent event =
                     new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);

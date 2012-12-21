@@ -20,7 +20,7 @@ public class StudentDoDziekana extends Entity{
     public static int licznikStudentow = 0;
     private int id;
     public static double czasPodchodzenia = 0.5;
-    public static double czasGeneracji = 2.5;
+    public static double czasGeneracji = 4.0;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     

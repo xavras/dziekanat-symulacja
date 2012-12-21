@@ -41,6 +41,9 @@ public class Dziekanat extends Model {
     //listy podan do dziekana oczekujacych na podpisanie i podpisanych
     public LinkedList<Integer> podaniaLista;
     public LinkedList<Integer> gotowePodaniaLista; 
+    
+    //alternatywna wersja, trochę chyba prostsza
+    public ListaPodan listaPodan;
       
     public Queue<StudentDoDziekana> kolejkaDziekan;
     public Dziekan dziekan;
@@ -95,7 +98,7 @@ public class Dziekanat extends Model {
                 podaniaLista = new LinkedList();
                 gotowePodaniaLista = new LinkedList();
 	
-                
+                listaPodan = new ListaPodan();
         }
 	/**
 	 * Inicjalizuje podstawowe elementy symulacji pracy Urzedu Miasta
@@ -233,8 +236,6 @@ public class Dziekanat extends Model {
             
             //usun z listy podan do podpisu
             podaniaLista.remove(index);
-            
-            
         }
         //zwraca false jesli podania nie ma na liscie
         public boolean odbiorPodania(int id_podania){

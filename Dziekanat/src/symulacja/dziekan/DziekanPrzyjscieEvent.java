@@ -36,7 +36,13 @@ public class DziekanPrzyjscieEvent extends Event<Dziekan>{
                     new DziekanObslugaPoczatekEvent(getModel(), getModel().getName(), traceIsOn());
             dziekanObsluga.schedule(model.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
         }
-        //else if(jest cos do podpisania) uruchom podpisywanie event
+        else if(!model.listaPodan.isEmpty())
+        {
+            dziekan.setZajety(true);
+            DziekanPodpisPoczatekEvent event =
+                new DziekanPodpisPoczatekEvent(model, getModel().getName(), true);
+            event.schedule(dziekan, new SimTime(0.0));
+        }
         
         DziekanWyjscieEvent dziekanWyjscie = 
                     new DziekanWyjscieEvent(getModel(), getModel().getName(), traceIsOn());
