@@ -17,13 +17,13 @@ import desmoj.core.simulator.Model;
 public class Dziekan extends Entity{
     
     public StudentDoDziekana aktualnyStudent;
-    public static double godzinaRozpoczecia;
-    public static double godzinaZakonczenia;
+    public static double godzinaRozpoczecia = 10.0;
+    public static double godzinaZakonczenia = 40.0;
     private boolean zajety;
     private boolean obecny;
     //public Queue<Podania> listaPodan;
-    public static double czasObslugi;
-    public static double czasPodpisywania;
+    public static double czasObslugi = 3.0;
+    public static double czasPodpisywania = 0.3;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     

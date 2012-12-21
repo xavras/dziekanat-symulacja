@@ -32,7 +32,7 @@ public class DziekanObslugaPoczatekEvent extends Event<Dziekan>{
 
         DziekanObslugaKoniecEvent event =
                 new DziekanObslugaKoniecEvent(model, getModel().getName(), true);
-        event.schedule(dziekan, new SimTime(Dziekan.czasObslugi/60.0));
+        event.schedule(dziekan, new SimTime(Dziekan.czasObslugi));
 
     }
 }

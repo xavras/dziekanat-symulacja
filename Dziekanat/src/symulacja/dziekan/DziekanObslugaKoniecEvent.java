@@ -48,17 +48,20 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
         }
         dziekan.aktualnyStudent = null;
         
-        //if(cos jest do podpisania) wywolaj event poczatek podpisywania
-        /*else */if(!model.kolejkaDziekan.isEmpty())//ktos jest w kolejce, wiec go wywolam
+        if(dziekan.isObecny())
         {
-            DziekanObslugaPoczatekEvent event =
-                new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);
-            event.schedule(dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia/60.0));
-        }
-        else
-        {
-            dziekan.wyslijTrace("Nic do roboty, czekam");
-            dziekan.setZajety(false);
+            //if(cos jest do podpisania) wywolaj event poczatek podpisywania
+            /*else */if(!model.kolejkaDziekan.isEmpty())//ktos jest w kolejce, wiec go wywolam
+            {
+                DziekanObslugaPoczatekEvent event =
+                    new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);
+                event.schedule(dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
+            }
+            else
+            {
+                dziekan.wyslijTrace("Nic do roboty, czekam");
+                dziekan.setZajety(false);
+            }
         }
         
         

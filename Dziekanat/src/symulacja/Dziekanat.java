@@ -5,10 +5,14 @@ import java.io.File;
 
 import desmoj.core.simulator.*;
 import desmoj.core.dist.*;
+import desmoj.core.report.HTMLTraceOutput;
+import java.util.ArrayList;
 
 import java.util.LinkedList;
 import symulacja.dziekan.Dziekan;
+import symulacja.dziekan.DziekanPrzyjscieEvent;
 import symulacja.student_do_dziekana.StudentDoDziekana;
+import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
 
 /**
  * To jest klasa z modelem Urzedu Miasta. Jest to glowna klasa modelu zdarzeniowego.
@@ -53,6 +57,8 @@ public class Dziekanat extends Model {
 	//Kolejka trzymajaca wszystkie okienka
 	protected Queue<PracownikDziekanatu> okienka;
 	protected Automat podajnikBloczkow;
+        
+        public ArrayList<HTMLTraceOutput> traces = new ArrayList<>();
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
 	 * 
@@ -79,6 +85,12 @@ public class Dziekanat extends Model {
                 
                 SprawyPozastudenckieGeneratorEvent generatorSpraw = new SprawyPozastudenckieGeneratorEvent(this,"PetentGenerator", true);
                 generatorSpraw.schedule(new SimTime(0.0));
+                
+                StudentDoDziekanaGeneratorEvent generatorDziekan = new StudentDoDziekanaGeneratorEvent(this, "StudentDoDziekanaGen", true);
+                generatorDziekan.schedule(new SimTime(0.0));
+                
+                DziekanPrzyjscieEvent przyjscieDziekana = new DziekanPrzyjscieEvent(this, "Przyjscie Dziekana", true);
+                przyjscieDziekana.schedule(dziekan, new SimTime(Dziekan.godzinaRozpoczecia));
                 
                 podaniaLista = new LinkedList();
                 gotowePodaniaLista = new LinkedList();
@@ -140,7 +152,8 @@ public class Dziekanat extends Model {
      	}
         
         dziekan = new Dziekan(getModel(), getModel().getName(), true);
-		
+        kolejkaDziekan = new Queue<StudentDoDziekana>(this, "Kolejka Do Dziekana", true, true);
+                
 	}
 	/**
 	 * @return probka czasu obslugi petenta
@@ -251,5 +264,11 @@ public class Dziekanat extends Model {
 		for (int i = 0; i < okienka.size(); i++)
 			okienka.get(i).zamknijTrace();
 		podajnikBloczkow.zamknijTrace();
+                dziekan.zamknijTrace();
+                
+                for(int i=0; i<traces.size(); i++)
+                {
+                    traces.get(i).close();
+                }
 	}
 } 

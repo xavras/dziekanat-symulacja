@@ -34,13 +34,13 @@ public class DziekanPrzyjscieEvent extends Event<Dziekan>{
             dziekan.setZajety(true);
             DziekanObslugaPoczatekEvent dziekanObsluga = 
                     new DziekanObslugaPoczatekEvent(getModel(), getModel().getName(), traceIsOn());
-            dziekanObsluga.schedule(model.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia/60.0));
+            dziekanObsluga.schedule(model.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
         }
         //else if(jest cos do podpisania) uruchom podpisywanie event
         
-        //DziekanWyjscieEvent dziekanWyjscie = 
-        //            new DziekanWyjscieEvent(getModel(), getModel().getName(), traceIsOn());
-        //dziekanWyjscie.schedule(model.dziekan, 
-        //            new SimTime((Dziekan.godzinaZakonczenia-Dziekan.godzinaRozpoczecia)/60.0));
+        DziekanWyjscieEvent dziekanWyjscie = 
+                    new DziekanWyjscieEvent(getModel(), getModel().getName(), traceIsOn());
+        dziekanWyjscie.schedule(model.dziekan, 
+                    new SimTime(Dziekan.godzinaZakonczenia-Dziekan.godzinaRozpoczecia));
     }
 }

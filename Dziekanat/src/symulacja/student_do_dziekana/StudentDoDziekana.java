@@ -8,6 +8,7 @@ import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
 import desmoj.core.simulator.*;
 import java.io.File;
+import symulacja.Dziekanat;
 /**
  *
  * @author lukasz
@@ -18,8 +19,8 @@ public class StudentDoDziekana extends Entity{
     private int czasTolerancji; //czas jaki student jest w stanie czekac zanim sie zniecierpliwi
     public static int licznikStudentow = 0;
     private int id;
-    public static double czasPodchodzenia;
-    public static double czasGeneracji;
+    public static double czasPodchodzenia = 0.5;
+    public static double czasGeneracji = 2.5;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     
@@ -32,8 +33,9 @@ public class StudentDoDziekana extends Entity{
         czasTolerancji = random.nextInt(30);//w minutach
         id = licznikStudentow++;
         
-        new File("traces/Studenci").mkdir();
-	trace.open("traces/Studenci", "StudentDziekan-" + id);
+        new File("traces/StudenciDziekan").mkdir();
+	trace.open("traces/StudenciDziekan", "StudentDziekan-" + id);
+        ((Dziekanat)wlasciciel).traces.add(trace);
     }
     
     /**

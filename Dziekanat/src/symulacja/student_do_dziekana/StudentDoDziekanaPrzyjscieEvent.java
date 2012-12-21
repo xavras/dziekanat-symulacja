@@ -32,7 +32,7 @@ public class StudentDoDziekanaPrzyjscieEvent extends Event<StudentDoDziekana>{
         {
             DziekanObslugaPoczatekEvent dziekanObsluga = 
                     new DziekanObslugaPoczatekEvent(getModel(), getModel().getName(), traceIsOn());
-            dziekanObsluga.schedule(mojModel.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia/60.0));
+            dziekanObsluga.schedule(mojModel.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
             student.wyslijTrace("Wszedlem od razu, bez kolejki");
         }
         else
