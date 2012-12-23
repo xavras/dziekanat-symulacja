@@ -28,21 +28,20 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
 	*/
 	public void eventRoutine(PracownikDziekanatu okno) {
 		Dziekanat mojModel = (Dziekanat)getModel();
-                SprawyPozastudenckie sprawa = mojModel.getSprawyPozastudenckieKolejka().removeFirst(); //null??? 
-		
-		okno.wyslijTrace("Zajmuje sie sprawa pozastud: " + okno.getAktualnaSprawa().getIdSprawy());
                 
-                
-                Random rand = new Random();
-                int czasTrwania = rand.nextInt(10)+1 ;//sprawa zabiera od 1 do 10 minut
-              
-                
-                //po zakonczeniu sprawy albo zajmij sie nastepna sprawa, albo wywolaj studenta
+                //sprawdzam czy sa sprawy studenckie do zalatwienia, jesli jest jakas to zajmuje sie nia
+                // (przerwa czasowa) oraz znowu szukam spraw do zalatwienia (wywiluje ten event jeszcze raz)
+                //jesli nic nie ma do roboty to zajmuje sie studentami
                 
                 //jesli sa do zalatwienia jakies sprawy pozastudenckie
                 if(!mojModel.getSprawyPozastudenckieKolejka().isEmpty()){
                     
-                    okno.setAktualnaSprawa(mojModel.getSprawyPozastudenckieKolejka().first());
+                    okno.setAktualnaSprawa(mojModel.getSprawyPozastudenckieKolejka().removeFirst());
+                    
+                    okno.wyslijTrace("Zajmuje sie sprawa pozastud: " + okno.getAktualnaSprawa().getIdSprawy());
+                
+                    Random rand = new Random();
+                    int czasTrwania = rand.nextInt(10)+1 ;//sprawa zabiera od 1 do 10 minut
                     ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
                     event.schedule(okno, new SimTime(czasTrwania));
                 }
@@ -53,10 +52,10 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
 			
 			okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
 			WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
-			event.schedule(okno, new SimTime(czasTrwania));
+			event.schedule(okno, new SimTime(0.0));//wywoluje studenta od razu bo nie ma juz spraw do zalatwienia
                     }
                     else {
-      
+                        //nie ma nic absolutnie do roboty
 			mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
                     }
                 }

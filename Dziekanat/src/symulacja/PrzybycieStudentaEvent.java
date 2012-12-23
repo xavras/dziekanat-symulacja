@@ -28,11 +28,10 @@ public class PrzybycieStudentaEvent extends Event<Student> {
      */
 	public void eventRoutine(Student student) {
 		Dziekanat mojModel = (Dziekanat)getModel();
-            
-		mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).insert(student);
 		
-		//sprawdzenie czy jest wolne okienko
-		if (!mojModel.getWolneOkienkaKierunku(student.getKierunek()).isEmpty()){
+                //sprawdzenie czy jest wolne okienko + czy nikt nie stoi w kolejce
+		if (!mojModel.getWolneOkienkaKierunku(student.getKierunek()).isEmpty() &&
+                        mojModel.studentKolejka[student.getKierunek()].isEmpty()){
 			PracownikDziekanatu okno = mojModel.getWolneOkienkaKierunku(student.getKierunek()).first();
 			mojModel.getWolneOkienkaKierunku(student.getKierunek()).remove(okno);
 			okno.setAktualnyStudent(student);
@@ -40,5 +39,7 @@ public class PrzybycieStudentaEvent extends Event<Student> {
 			WywolanieStudentaEvent wywolanieStudenta = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta przez " + mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).getName(), true);
 			wywolanieStudenta.schedule(okno, new SimTime(0.0));
 		} 
+                
+                mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).insert(student);
 	}       
 }
