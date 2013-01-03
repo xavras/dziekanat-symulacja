@@ -25,17 +25,31 @@ public class WywolanieStudentaEvent extends Event<PracownikDziekanatu> {
 	* 
 	* @param okno - okienko wydzialu do ktorego podszedl petent
 	*/
+        
+        
 	public void eventRoutine(PracownikDziekanatu okno) {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
 		Student student = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first();
 		mojModel.getPodajnikBloczkow().wyslijTrace(okno.getAktualnyStudent().getNumer() + " numer proszony do okienka: " + okno.getName());        
                 okno.setAktualnyStudent(student);
-           
-       	if (student.getCzasPodchodzeniaStudenta() < 15){
+        
+                // czy student sobie nie poszedl?
+                
+                double obecnyCzas = presentTime().getTimeAsDouble();
+                double czasPrzybyciaStudenta = student.getCzasPrzybycia();
+                
+                boolean czyJeszczeJest = (obecnyCzas - czasPrzybyciaStudenta > student.getCzasTolerancjiStudenta()) ? false : true;
+                
+        // jesli student jeszcze jest (nieprzekroczony zostal czas tolerancji) i ma czas podchodzenia <15sek.        
+       	if (student.getCzasPodchodzeniaStudenta() < 15 && czyJeszczeJest == true){
        		StudentPodchodziEvent klientPodchodzi = new StudentPodchodziEvent(mojModel, "Student podchodzi do " + mojModel.getWolneOkienkaKierunku(student.getKierunek()).getName(), true);
        		klientPodchodzi.schedule(okno, new SimTime((double)student.getCzasPodchodzeniaStudenta()/60));
-       	} else{
+                
+        } else{
+              
+            //test:System.out.println("powtorne wywolanie STUDENT: "+student.getId()+"; tolerancja= "+student.getCzasTolerancjiStudenta());
+                
        		PowtorneWywolanieEvent powtorneWywolaniePetenta = new PowtorneWywolanieEvent(mojModel, "Powtorne Wywolanie do " + mojModel.getWolneOkienkaKierunku(student.getKierunek()).getName(), true);
        		powtorneWywolaniePetenta.schedule(okno, new SimTime(15.0/60));
        	}

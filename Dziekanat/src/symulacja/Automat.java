@@ -39,6 +39,9 @@ public class Automat extends Entity {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		student.wyslijTrace("Przyszedlem o: " + presentTime());
 		
+                //zapisz czas przybycia
+                student.setCzasPrzybycia(presentTime().getTimeAsDouble());
+                
 		//sprawdzenie czy Urzad moze jeszcze przyjac petentow
 		if (student.getLicznikPetentow() < maxStudentow){
 			

@@ -38,6 +38,8 @@ public class Dziekanat extends Model {
     protected static double czasTrwaniaPrzerwyDouble = 5;
     
     protected static double czasMiedzyPrzerwami =10; //czas po ktorym pracownik dziekanatu stwierdza ze musi isc na przerwae
+    
+    protected static int limitTolerancjiStudentow = 30; //w minutach -> w konstruktorze studenta potem losujemy czas tolerancji pojedynczego studenta z przedzialu <0;limit> //kch.
         
     protected RealDistUniform czasObslugi;
     protected static double minCzasObslugi = 2.0;
@@ -201,6 +203,9 @@ public class Dziekanat extends Model {
         return czasMiedzyPrzerwami;
     }
     
+    public static int getLimitTolerancjiStudentow(){
+        return limitTolerancjiStudentow; //ile sa sklonni czekac
+    }
     public Queue<SprawyPozastudenckie> getSprawyPozastudenckieKolejka(){
         return sprawyPozastudenckieKolejka;
     }

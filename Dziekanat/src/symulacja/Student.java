@@ -12,7 +12,8 @@ import desmoj.core.simulator.*;
  */
 public class Student extends Entity {    
         int czasPodchodzeniaStudenta;
-        int czasTolerancji; //czas jaki student jest w stanie czekac zanim sie zniecierpliwi
+        double czasTolerancji; //czas jaki student jest w stanie czekac zanim sie zniecierpliwi
+        double czasPrzybycia;
         //0- E 1- AiR 2-IS 3-IB
         int kierunek;
         static int licznikStudentow = 0;
@@ -20,6 +21,10 @@ public class Student extends Entity {
         int numer; //numer na bloczku z automatu
         
         int sprawa; //0-pytanie 1-zlozenia podania 2-odbior podania
+        
+        
+        
+        
         
         protected HTMLTraceOutput trace = new HTMLTraceOutput();;
     	/**	 
@@ -36,7 +41,7 @@ public class Student extends Entity {
 			Random rand= new Random();
 			czasPodchodzeniaStudenta = rand.nextInt(40);// w sekundach
                         kierunek = rand.nextInt(4);
-                        czasTolerancji = rand.nextInt(30); //w minutach
+                        czasTolerancji = rand.nextInt(Dziekanat.getLimitTolerancjiStudentow()); //w minutach
                         id = licznikStudentow;
                         licznikStudentow++;
                         
@@ -80,6 +85,17 @@ public class Student extends Entity {
     	 */
         public int getCzasPodchodzeniaStudenta(){
            return this.czasPodchodzeniaStudenta;
+        }
+        
+        public double getCzasTolerancjiStudenta(){
+            return czasTolerancji;
+        }
+        
+        public double getCzasPrzybycia(){
+            return czasPrzybycia;
+        }
+        public void setCzasPrzybycia (double czas){
+            this.czasPrzybycia = czas;
         }
         /**
          * 
