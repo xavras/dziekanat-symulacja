@@ -24,15 +24,20 @@ import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
  * @author Kachat j.W.
  */
 public class Dziekanat extends Model {
-	protected static int NUM_OK_E = 1;
+    protected static int NUM_OK_E = 1;
     protected static int NUM_OK_AIR = 1;
     protected static int NUM_OK_IS = 1;
     protected static int NUM_OK_IB = 1;
     protected RealDistExponential czasPrzybyciaStudenta;
-	protected static double czasPrzybyciaStudentaDouble = 0.5;
+    protected static double czasPrzybyciaStudentaDouble = 0.5;
         
     protected RealDistExponential czasNowejSprawyPozastudenckiej;
     protected static double czasNowejSprawyPozastudenckiejDouble = 5;
+    
+    protected RealDistExponential czasTrwaniaPrzerwy;
+    protected static double czasTrwaniaPrzerwyDouble = 5;
+    
+    protected static double czasMiedzyPrzerwami =10; //czas po ktorym pracownik dziekanatu stwierdza ze musi isc na przerwae
         
     protected RealDistUniform czasObslugi;
     protected static double minCzasObslugi = 2.0;
@@ -111,9 +116,12 @@ public class Dziekanat extends Model {
 		czasPrzybyciaStudenta= new RealDistExponential(this, "czasPrzybyciaPetentaStrumien", czasPrzybyciaStudentaDouble, true, false);
 		czasPrzybyciaStudenta.setNonNegative(true);
                
-                czasNowejSprawyPozastudenckiej = new RealDistExponential(this, "czasNowejSprawyStruien", czasNowejSprawyPozastudenckiejDouble, true, false);
+                czasNowejSprawyPozastudenckiej = new RealDistExponential(this, "czasNowejSprawyStrumien", czasNowejSprawyPozastudenckiejDouble, true, false);
                 czasNowejSprawyPozastudenckiej.setNonNegative(true);
 		
+                czasTrwaniaPrzerwy = new RealDistExponential(this, "czasTrwaniaPrzerwy", czasTrwaniaPrzerwyDouble, true, false);
+                czasTrwaniaPrzerwy.setNonNegative(true);
+                
                 sprawyPozastudenckieKolejka =new Queue<SprawyPozastudenckie>(this, "sprawyPozastudKolejka", true, true);
                 
 		studentKolejka[0] = new Queue<Student>(this, "Kolejka studentow do okienka dla Elektrotechniki", true, true);
@@ -182,9 +190,16 @@ public class Dziekanat extends Model {
         }
         
         
+        public double getCzasTrwaniaPrzerwy(){
+            return czasTrwaniaPrzerwy.sample();
+        }
     public Queue<Student> getPetentKolejkaDoKierunku(int i) {
 		return studentKolejka[i];
 	}
+    
+    public double getCzasMiedzyPrzerwami(){
+        return czasMiedzyPrzerwami;
+    }
     
     public Queue<SprawyPozastudenckie> getSprawyPozastudenckieKolejka(){
         return sprawyPozastudenckieKolejka;

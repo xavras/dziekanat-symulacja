@@ -34,6 +34,27 @@ public class KoniecObslugiEvent extends Event<PracownikDziekanatu> {
 		okno.wyslijTrace("Student: " + okno.getAktualnyStudent().getId() + " odszedl");
 		okno.setAktualnyStudent(null);
 
+                //sprawdzenie czy dany pracownik dziekanatu nie potrzebuje przerwy;
+                double czasOstatniejPrzerwy = okno.getCzasOstatniejPrzerwy();
+                
+                double obecnyCzas = presentTime().getTimeAsDouble();
+                
+                
+                if (obecnyCzas - czasOstatniejPrzerwy > mojModel.getCzasMiedzyPrzerwami()){
+                    okno.setCzyZrobicTerazPrzerwe(true);
+                    okno.setCzasOstatniejPrzerwy(obecnyCzas);
+                }
+                
+              //nadrzedne: czy nalezy zrobic teraz przerwe?  
+              if(okno.getCzyZrobicTerazPrzerwe() == true){
+                  PrzerwaPracownikaDziekanatuEvent event = new PrzerwaPracownikaDziekanatuEvent(mojModel, "Przerwa pracownika",true);
+                  event.schedule(okno, new SimTime(0.0)); //przerwa teraz.
+                  
+              
+              }  
+              else{ //jesli nie potrzebuje przerwy:
+                  
+              
 		//sprawdzenie, czy kolejejka do petentow do wydzialu tego okna jest nie pusta
 		//jesli nie jest: uruchomienie procedury wywolywanie petenta; jesli jest to dodanie okna do oczekujacych okienek
 		
@@ -63,6 +84,7 @@ public class KoniecObslugiEvent extends Event<PracownikDziekanatu> {
 			mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
                     }
                 }
+              }
 
 	}
 }

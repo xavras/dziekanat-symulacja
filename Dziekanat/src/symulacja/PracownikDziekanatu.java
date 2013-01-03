@@ -19,6 +19,8 @@ public class PracownikDziekanatu extends Entity {
 	protected int obslugiwanyKierunek;
 	protected HTMLTraceOutput trace = new HTMLTraceOutput();
         
+        protected double czasOstatniejPrzerwy ;
+        protected boolean czyZrobicTerazPrzerwe ;
         
         
 	/**	 
@@ -34,6 +36,8 @@ public class PracownikDziekanatu extends Entity {
 		super(wlasciciel, nazwa, pokazTrace);		
 		this.obslugiwanyKierunek = kierunek;
 
+                czasOstatniejPrzerwy = 0;
+                czyZrobicTerazPrzerwe =false;
 	}
 
         
@@ -65,6 +69,22 @@ public class PracownikDziekanatu extends Entity {
 	public int getKierunek(){
 		return obslugiwanyKierunek;
 	}
+        
+        public double getCzasOstatniejPrzerwy (){
+            return czasOstatniejPrzerwy;
+            
+        }
+        public void setCzasOstatniejPrzerwy (double czas){
+            this.czasOstatniejPrzerwy = czas;
+        }
+        
+        public boolean getCzyZrobicTerazPrzerwe(){
+            return czyZrobicTerazPrzerwe;
+        }
+        
+        public void setCzyZrobicTerazPrzerwe(boolean przerwa){
+            this.czyZrobicTerazPrzerwe = przerwa;
+        }
 	/**
 	 * Ustawia sciezke zapisu trace'a
 	 * 
