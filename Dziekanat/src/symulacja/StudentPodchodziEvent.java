@@ -50,8 +50,9 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                             student.wyslijTrace("zlozylem podanie");
                         
                             //TO DO: Event ze wraca
+                            StudentGeneratorEvent event = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                            event.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
                             
-                        
                         break;
                     case 2: //sprawdzenie czy podanie jest podpisane
                             if(mojModel.listaPodan.isPodpisaneAndGet(student.getId()))
@@ -63,6 +64,9 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                                 //musi wrocic jeszcze raz 
                                 student.wyslijTrace("nie odebralem podania, wroce jeszcze raz");
                                 //TO DO: Event ze wraca
+                                 StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                                 SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                                 
                             }
                         break;
                     
