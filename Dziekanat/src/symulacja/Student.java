@@ -48,7 +48,8 @@ public class Student extends Entity {
                         sprawa = rand.nextInt(2); //poczatkowo moze miec tylko wart 0 lub 1, nie moze miec 2 bo zeby odebrac podanie najpierw musi je zlozyc
 	        
 	        new File("traces/Studenci").mkdir();
-	        trace.open("traces/Studenci", "Student-" + id);              
+	        trace.open("traces/Studenci", "Student-" + id);
+                ((Dziekanat)getModel()).traces.add(trace);
 		}
 		
         public void setKierunek(int kierunek)

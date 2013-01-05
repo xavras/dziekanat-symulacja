@@ -37,7 +37,8 @@ public class StudentDoDziekanaPrzyjscieEvent extends Event<StudentDoDziekana>{
         }
         else
         {
-            student.wyslijTrace("Musze poczekac");
+            student.wyslijTrace("Musze poczekac. Dlugosc kolejki: "
+                    +((Dziekanat)getModel()).kolejkaDziekan.length());
         }
     }
     

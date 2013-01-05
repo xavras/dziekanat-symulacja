@@ -76,13 +76,14 @@ public class KoniecObslugiEvent extends Event<PracownikDziekanatu> {
                                 WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie petenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);
                                 event.schedule(okno, new SimTime(0.0));
                             } else {
-
-
                                 mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
                             }
                         }
                     }
-                }
+                }//koniec pracy :P
+                else {
+                                mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                            }
 
 	}
 }

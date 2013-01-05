@@ -7,6 +7,7 @@ package symulacja.praca_dzienna;
 import desmoj.core.simulator.ExternalEvent;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.SimTime;
+import symulacja.Automat;
 import symulacja.Dziekanat;
 import symulacja.SprawyPozastudenckieGeneratorEvent;
 import symulacja.StudentGeneratorEvent;
@@ -29,7 +30,13 @@ import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
 		mojModel.otwarty = false;
 		mojModel.wyslijTracePracownikom("Koniec czasu, ide za chwile do domu.");
                 
-                for(int i=0; i<mojModel.)
+                for(int i=0; i<4; i++)
+                {
+                    Automat.licznikStudentowZKierunku[i] = 0;
+                }
+                
+                mojModel.kolejkaDziekan.removeAll();
+                mojModel.wyczyscKolejkeStudentow();
                 
                 //otwieramy za pół godziny (czyli nowy dzień)
                 OtwarcieDziekanatuEvent openTheDoors = new OtwarcieDziekanatuEvent(getModel(), "Otwieramy Dziekanat", true);

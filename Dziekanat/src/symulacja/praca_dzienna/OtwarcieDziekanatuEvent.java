@@ -27,7 +27,9 @@ public class OtwarcieDziekanatuEvent extends ExternalEvent{
     public void eventRoutine() {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		mojModel.otwarty = true;
-                mojModel.wyslijTracePracownikom("Wstaje nowy dzien, poczatek pracy i bycia niemilym dla studentow :D");
+                mojModel.wyslijTracePracownikom("Wstaje nowy dzien, poczatek pracy i bycia milym dla studentow :D");
+                mojModel.wyslijTracePracownikom("Do zrobienia jest "+mojModel.sprawyPozastudenckieKolejka.length()+" spraw");
+                mojModel.wyslijTracePracownikom(mojModel.infoOkienka());
 		
                 StudentGeneratorEvent generatorStudentow = new StudentGeneratorEvent(getModel(), "StudentGenerator", true);
 		generatorStudentow.schedule(new SimTime(0.0));

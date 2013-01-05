@@ -64,6 +64,10 @@ public class PrzerwaPracownikaDziekanatuEvent extends Event<PracownikDziekanatu>
                         }
                     }
                 }
+                else {//wracam do domu
+                            //nie ma nic absolutnie do roboty
+                            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        }
         
 	}
 }

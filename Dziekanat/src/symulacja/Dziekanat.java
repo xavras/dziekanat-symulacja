@@ -73,6 +73,9 @@ public class Dziekanat extends Model {
 	protected Queue<PracownikDziekanatu> okienka;
 	protected Automat podajnikBloczkow;
         
+        public static final String nazwyKierunkow[] = 
+        {"Elektrotechnika","AiR","IS","IB"};
+        
         public ArrayList<HTMLTraceOutput> traces = new ArrayList<>();
 	/**
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej
@@ -332,5 +335,25 @@ public class Dziekanat extends Model {
             {
                 okienka.get(i).wyslijTrace(note);
             }
+        }
+        
+        public void wyczyscKolejkeStudentow()
+        {
+            for(int i=0; i<studentKolejka.length; i++)
+            {
+                studentKolejka[i].removeAll();
+            }
+        }
+        
+        public String infoOkienka()
+        {
+            String ret = "";
+            for(int i=0; i<wolneOkienka.length; i++)
+            {
+                ret+="Wolne Okienka, kierunek " + nazwyKierunkow[i] + ": " + 
+                        wolneOkienka[i].length() + "<br />";
+            }
+            
+            return ret;
         }
 } 

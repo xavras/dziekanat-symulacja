@@ -17,7 +17,7 @@ public class Automat extends Entity {
         protected static int maxStudentowKierunek = 20;
 	protected HTMLTraceOutput trace = new HTMLTraceOutput();
 	//licznik petentow do okienek: 0 - Elektrotechnika 1 - AiR  2 - Stosowana 3 - Inż. Biomedyczna
-	protected static int licznikStudentowZKierunku[] = new int[iloscKierunkow];
+	public static int licznikStudentowZKierunku[] = new int[iloscKierunkow];
 	/**	 
 	 * Konstruktor, wywolujacy konstruktor klasy nadrzednej i ustalajacy sciezke trace'a
 	 *  
@@ -43,7 +43,7 @@ public class Automat extends Entity {
                 student.setCzasPrzybycia(presentTime().getTimeAsDouble());
                 
 		//sprawdzenie czy Urzad moze jeszcze przyjac petentow
-		if (student.getLicznikPetentow() < maxStudentow){
+		if (student.getLicznikPetentow() < maxStudentow*mojModel.dzienTeraz()){
 			
 			//sprawdzenie czy dane okienko moze jeszcze przyjac studentow
 			if (licznikStudentowZKierunku[student.getKierunek()] < maxStudentowKierunek){

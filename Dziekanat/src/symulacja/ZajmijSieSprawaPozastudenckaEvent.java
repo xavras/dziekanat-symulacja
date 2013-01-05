@@ -47,6 +47,10 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
                         ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
                         event.schedule(okno, new SimTime(czasTrwania));
                     }
+                    else {//wracam do domu
+                            //nie ma nic absolutnie do roboty
+                            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        }
                 }
                 else{//jesli nie ma spraw pozastudenckich do zalatwienia
                 
@@ -64,6 +68,10 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
                             mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
                         }
                     }
+                    else {//wracam do domu
+                            //nie ma nic absolutnie do roboty
+                            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        }
                 }
                 
                 

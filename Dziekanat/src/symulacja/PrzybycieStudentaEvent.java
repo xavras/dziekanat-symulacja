@@ -40,6 +40,10 @@ public class PrzybycieStudentaEvent extends Event<Student> {
 			wywolanieStudenta.schedule(okno, new SimTime(0.0));
 		} 
                 
+                //ktos jednak stoi
+                student.wyslijTrace("Musze poczekac, dlugosc kolejki: "
+                        +mojModel.studentKolejka[student.getKierunek()].length());
+                student.wyslijTrace("Moj kierunek to: "+Dziekanat.nazwyKierunkow[student.getKierunek()]);
                 mojModel.getPetentKolejkaDoKierunku(student.getKierunek()).insert(student);
 	}       
 }
