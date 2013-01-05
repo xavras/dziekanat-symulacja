@@ -45,7 +45,8 @@ public class StudentDoDziekana extends Entity{
     */
     public void wyslijTrace(String note)
     {
-       trace.receive(new TraceNote(getModel(), note, presentTime(), this, null));
+        note = ""+((Dziekanat)getModel()).czasTeraz()+"> "+note;
+        trace.receive(new TraceNote(getModel(), note, presentTime(), this, null));
     }
     /**
     * Zamyka aktywnego trace'a

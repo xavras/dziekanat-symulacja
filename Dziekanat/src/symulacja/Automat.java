@@ -72,6 +72,7 @@ public class Automat extends Entity {
 	 */
     public void wyslijTrace(String note)
     {
+        note = ""+((Dziekanat)getModel()).czasTeraz()+"> "+note;
         trace.receive(new TraceNote(getModel(), note, presentTime(), this, null));
     }
     

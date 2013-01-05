@@ -27,6 +27,11 @@ public class DziekanObslugaPoczatekEvent extends Event<Dziekan>{
         Dziekanat model = (Dziekanat) this.getModel();
 
         dziekan.aktualnyStudent = model.kolejkaDziekan.removeFirst();
+        if(dziekan.aktualnyStudent == null)
+        {
+            dziekan.wyslijTrace("Jakis Blad, student jest pusty.");
+            return;
+        }
         dziekan.wyslijTrace("Zaczynam obsluge studenta "+dziekan.aktualnyStudent.getId());
         dziekan.aktualnyStudent.wyslijTrace("Jestem obslugiwany przez Dziekana"); 
 

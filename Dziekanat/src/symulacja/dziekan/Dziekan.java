@@ -9,6 +9,7 @@ import desmoj.core.report.HTMLTraceOutput;
 import desmoj.core.report.TraceNote;
 import desmoj.core.simulator.Entity;
 import desmoj.core.simulator.Model;
+import symulacja.Dziekanat;
 
 /**
  *
@@ -17,8 +18,8 @@ import desmoj.core.simulator.Model;
 public class Dziekan extends Entity{
     
     public StudentDoDziekana aktualnyStudent;
-    public static double godzinaRozpoczecia = 10.0;
-    public static double godzinaZakonczenia = 40.0;
+    public static double godzinaRozpoczecia = 10.0;//10:00
+    public static double godzinaZakonczenia = 11.5;//11:30
     private boolean zajety;
     private boolean obecny;
     //public Queue<Podania> listaPodan;
@@ -38,6 +39,7 @@ public class Dziekan extends Entity{
     
     public void wyslijTrace(String note)
     {
+       note = ""+((Dziekanat)getModel()).czasTeraz()+"> "+note;
        trace.receive(new TraceNote(getModel(), note, presentTime(), this, null));
     }
     

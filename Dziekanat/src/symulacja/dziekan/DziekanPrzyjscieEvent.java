@@ -47,6 +47,6 @@ public class DziekanPrzyjscieEvent extends Event<Dziekan>{
         DziekanWyjscieEvent dziekanWyjscie = 
                     new DziekanWyjscieEvent(getModel(), getModel().getName(), traceIsOn());
         dziekanWyjscie.schedule(model.dziekan, 
-                    new SimTime(Dziekan.godzinaZakonczenia-Dziekan.godzinaRozpoczecia));
+                    new SimTime((Dziekan.godzinaZakonczenia-Dziekan.godzinaRozpoczecia)*60.0));
     }
 }

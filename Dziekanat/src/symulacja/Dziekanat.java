@@ -29,7 +29,7 @@ public class Dziekanat extends Model {
     protected static int NUM_OK_IS = 1;
     protected static int NUM_OK_IB = 1;
     protected RealDistExponential czasPrzybyciaStudenta;
-    protected static double czasPrzybyciaStudentaDouble = 0.5;
+    protected static double czasPrzybyciaStudentaDouble = 5;
         
     protected RealDistExponential czasNowejSprawyPozastudenckiej;
     protected static double czasNowejSprawyPozastudenckiejDouble = 5;
@@ -41,6 +41,9 @@ public class Dziekanat extends Model {
     
     protected static int limitTolerancjiStudentow = 30; //w minutach -> w konstruktorze studenta potem losujemy czas tolerancji pojedynczego studenta z przedzialu <0;limit> //kch.
         
+    public static double godzinaOtwarcia = 9.0;
+    public static double godzinaZamkniecia = 12.0;
+    
     protected RealDistUniform czasObslugi;
     protected static double minCzasObslugi = 2.0;
     protected static double maxCzasObslugi = 5.0;
@@ -100,7 +103,7 @@ public class Dziekanat extends Model {
                 generatorDziekan.schedule(new SimTime(0.0));
                 
                 DziekanPrzyjscieEvent przyjscieDziekana = new DziekanPrzyjscieEvent(this, "Przyjscie Dziekana", true);
-                przyjscieDziekana.schedule(dziekan, new SimTime(Dziekan.godzinaRozpoczecia));
+                przyjscieDziekana.schedule(dziekan, new SimTime((Dziekan.godzinaRozpoczecia-Dziekanat.godzinaOtwarcia)*60.0));
                 
                 podaniaLista = new LinkedList();
                 gotowePodaniaLista = new LinkedList();
@@ -292,4 +295,31 @@ public class Dziekanat extends Model {
                     traces.get(i).close();
                 }
 	}
+        
+        public double godzinaTeraz(){
+            double czasTeraz = this.currentTime().getTimeValue();
+            double czasDnia = Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia+0.5;
+            double wsp = Math.floor(czasTeraz/(czasDnia*60.0));
+            //wsp+1 - ktory mamy dzien
+            double teraz = (czasTeraz/60.0-wsp*czasDnia)+Dziekanat.godzinaOtwarcia;
+            return teraz;
+        }
+        
+        public String czasTeraz()
+        {
+            double czasTeraz = this.currentTime().getTimeValue();
+            double czasDnia = Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia+0.5;
+            double wsp = Math.floor(czasTeraz/(czasDnia*60.0));
+            //wsp+1 - ktory mamy dzien
+            double teraz = (czasTeraz-wsp*czasDnia*60.0)+Dziekanat.godzinaOtwarcia*60.0;
+            double godz = Math.floor(teraz/60.0);
+            double min = (teraz-godz*60.0);
+            String ret = "";
+            if(godz<10)ret+="0"+(int)godz;
+            else ret += (int)godz;
+            ret+=":";
+            if(min<10)ret+="0"+(int)min;
+            else ret += (int)min;
+            return ret;
+        }
 } 

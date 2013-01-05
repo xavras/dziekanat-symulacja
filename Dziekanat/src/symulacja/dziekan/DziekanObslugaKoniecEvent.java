@@ -26,7 +26,7 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
     @Override
     public void eventRoutine(Dziekan dziekan) {
         Dziekanat model = (Dziekanat) this.getModel();
-        
+        dziekan.setZajety(true);
         dziekan.wyslijTrace("Koncze obsluge studenta "+dziekan.aktualnyStudent.getId());
         dziekan.aktualnyStudent.wyslijTrace("Zostalem obsluzony przez Dziekana"); 
 
@@ -50,7 +50,7 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
         
         if(dziekan.isObecny())
         {
-            if(!model.listaPodan.isEmpty()) //wywolaj event poczatek podpisywania
+            if(model.listaPodan.isPodanieDoPodpisania()) //wywolaj event poczatek podpisywania
             {
                 DziekanPodpisPoczatekEvent event =
                     new DziekanPodpisPoczatekEvent(model, getModel().getName(), true);
@@ -60,7 +60,11 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
             {
                 DziekanObslugaPoczatekEvent event =
                     new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);
-                event.schedule(dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
+                double czasPrzyjscia = StudentDoDziekana.czasPodchodzenia/60.0+model.godzinaTeraz();
+                if(czasPrzyjscia < Dziekan.godzinaZakonczenia)
+                {
+                    event.schedule(dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
+                }
             }
             else
             {

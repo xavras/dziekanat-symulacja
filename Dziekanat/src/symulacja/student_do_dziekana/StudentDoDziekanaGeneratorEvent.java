@@ -27,7 +27,7 @@ public class StudentDoDziekanaGeneratorEvent extends ExternalEvent{
         StudentDoDziekana student= new StudentDoDziekana(model, "StudentDoDziekana", true);
         student.wyslijTrace("Pojawilem sie na swiecie");
         
-        if(model.currentTime().getTimeValue() <= Dziekan.godzinaZakonczenia)
+        if(model.godzinaTeraz() <= Dziekan.godzinaZakonczenia)
         {
             StudentDoDziekanaPrzyjscieEvent event = 
                     new StudentDoDziekanaPrzyjscieEvent(getModel(), getModel().getName(), traceIsOn());

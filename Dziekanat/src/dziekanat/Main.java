@@ -2,6 +2,7 @@ package dziekanat;
 
 import desmoj.core.simulator.Experiment;
 import desmoj.core.simulator.SimTime;
+import symulacja.Dziekanat;
 
 
 /**
@@ -18,9 +19,11 @@ public class Main {
 		Experiment exp = new Experiment("Symulacja pracy dziakanatu");
 		model.connectToExperiment(exp);
 
+                double czasSymulacji = 60.0*(0.5+Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia);
+                
 		exp.setShowProgressBar(true);
-		exp.stop(new SimTime(60));
-		exp.tracePeriod(new SimTime(0.0), new SimTime(60));
+		exp.stop(new SimTime(czasSymulacji));
+		exp.tracePeriod(new SimTime(0.0), new SimTime(czasSymulacji));
 		
 		exp.start();
 		exp.report();	

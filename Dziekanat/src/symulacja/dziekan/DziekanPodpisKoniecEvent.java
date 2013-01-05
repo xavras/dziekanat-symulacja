@@ -22,23 +22,28 @@ public class DziekanPodpisKoniecEvent extends Event<Dziekan>{
     
     @Override
     public void eventRoutine(Dziekan e) {
+        e.setZajety(true);
         Dziekanat model = (Dziekanat)getModel();
         int idPodania = model.listaPodan.podpiszPodanie();
         e.wyslijTrace("Podpisalem podanie Studenta "+idPodania);
         
         if(e.isObecny())//bo mógł już skończyć, czyż nie?
         {
-            if(!model.kolejkaDziekan.isEmpty())//jest student, przyjme studenta
-            {
-                DziekanObslugaPoczatekEvent event =
-                    new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);
-                event.schedule(e, new SimTime(StudentDoDziekana.czasPodchodzenia));
-            }
-            else if(model.listaPodan.isPodanieDoPodpisania())//o, coś leży na stole. A, podpiszę.
+            if(model.listaPodan.isPodanieDoPodpisania())//o, coś leży na stole. A, podpiszę.
             {
                 DziekanPodpisPoczatekEvent event =
                     new DziekanPodpisPoczatekEvent(model, getModel().getName(), true);
                 event.schedule(e, new SimTime(0.0));
+            }
+            else if(!model.kolejkaDziekan.isEmpty())//jest student, przyjme studenta
+            {
+                DziekanObslugaPoczatekEvent event =
+                    new DziekanObslugaPoczatekEvent(model, getModel().getName(), true);
+                double czasPrzyjscia = StudentDoDziekana.czasPodchodzenia/60.0+model.godzinaTeraz();
+                if(czasPrzyjscia < Dziekan.godzinaZakonczenia)
+                {
+                    event.schedule(e, new SimTime(StudentDoDziekana.czasPodchodzenia));
+                }
             }
             else
             {
