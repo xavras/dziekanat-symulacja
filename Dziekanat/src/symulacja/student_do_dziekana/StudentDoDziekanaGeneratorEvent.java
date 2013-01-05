@@ -24,11 +24,12 @@ public class StudentDoDziekanaGeneratorEvent extends ExternalEvent{
     
     public void eventRoutine() {
         Dziekanat model = (Dziekanat)getModel();
-        StudentDoDziekana student= new StudentDoDziekana(model, "StudentDoDziekana", true);
-        student.wyslijTrace("Pojawilem sie na swiecie");
         
         if(model.godzinaTeraz() <= Dziekan.godzinaZakonczenia)
         {
+            StudentDoDziekana student= new StudentDoDziekana(model, "StudentDoDziekana", true);
+            student.wyslijTrace("Pojawilem sie na swiecie");
+            
             StudentDoDziekanaPrzyjscieEvent event = 
                     new StudentDoDziekanaPrzyjscieEvent(getModel(), getModel().getName(), traceIsOn());
             event.schedule(student, new SimTime(StudentDoDziekana.czasPodchodzenia));
@@ -37,7 +38,8 @@ public class StudentDoDziekanaGeneratorEvent extends ExternalEvent{
         }
         else
         {
-            student.wyslijTrace("Chyba sie spoznilem...");
+            model.dziekan.wyslijTrace("Juz zaden student sie nie wygeneruje, bo dziekan idzie do domu. Koniec Eventa. HA HA.");
+            model.dziekan.wyslijTrace("This is what you get, this is what you get, This is what you get when you mess with us. Karma police, I've given all I can, it's not enough, I've given all I can but we're still on the payroll");
         }
     }
     

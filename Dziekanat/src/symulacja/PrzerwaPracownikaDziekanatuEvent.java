@@ -37,33 +37,33 @@ public class PrzerwaPracownikaDziekanatuEvent extends Event<PracownikDziekanatu>
                 okno.wyslijTrace("PRZERWA, trwac bedzie= "+czasTrwaniaPrzerwy);
                 okno.setCzyZrobicTerazPrzerwe(false); // teraz robi przerwe, po nastepnym evencie jej nie bedzie potrzebowal.
                 
-                if(!mojModel.getSprawyPozastudenckieKolejka().isEmpty()){
-                    
-                    okno.setAktualnaSprawa(mojModel.getSprawyPozastudenckieKolejka().removeFirst());
-                    
-                    okno.wyslijTrace("Zajmuje sie sprawa pozastud: " + okno.getAktualnaSprawa().getIdSprawy());
-                
-                    
-                    ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
-                    event.schedule(okno, new SimTime(czasTrwaniaPrzerwy));
-                }
-                else{//jesli nie ma spraw pozastudenckich do zalatwienia
-                
-                    if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
-                    {
-			
-			okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
-			WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
-			event.schedule(okno, new SimTime(czasTrwaniaPrzerwy));//wywoluje studenta od razu bo nie ma juz spraw do zalatwienia
+                if(mojModel.otwarty)//nie zaczyna nic nowego, kiedy czas się kończy
+                {
+                    if(!mojModel.getSprawyPozastudenckieKolejka().isEmpty()){
+
+                        okno.setAktualnaSprawa(mojModel.getSprawyPozastudenckieKolejka().removeFirst());
+
+                        okno.wyslijTrace("Zajmuje sie sprawa pozastud: " + okno.getAktualnaSprawa().getIdSprawy());
+
+
+                        ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
+                        event.schedule(okno, new SimTime(czasTrwaniaPrzerwy));
                     }
-                    else {
-                        //nie ma nic absolutnie do roboty
-			mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                    else{//jesli nie ma spraw pozastudenckich do zalatwienia
+
+                        if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
+                        {
+
+                            okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
+                            WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
+                            event.schedule(okno, new SimTime(czasTrwaniaPrzerwy));//wywoluje studenta od razu bo nie ma juz spraw do zalatwienia
+                        }
+                        else {
+                            //nie ma nic absolutnie do roboty
+                            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        }
                     }
                 }
-                
-                
-                
         
 	}
 }

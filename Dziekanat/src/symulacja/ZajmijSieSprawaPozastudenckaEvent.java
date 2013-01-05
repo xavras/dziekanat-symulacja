@@ -42,21 +42,27 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
                 
                     Random rand = new Random();
                     int czasTrwania = rand.nextInt(10)+1 ;//sprawa zabiera od 1 do 10 minut
-                    ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
-                    event.schedule(okno, new SimTime(czasTrwania));
+                    if(mojModel.otwarty)//tylko jeśli jeszcze jest w pracy
+                    {
+                        ZajmijSieSprawaPozastudenckaEvent event = new ZajmijSieSprawaPozastudenckaEvent(mojModel, "Sprawa pozastudencka",true);
+                        event.schedule(okno, new SimTime(czasTrwania));
+                    }
                 }
                 else{//jesli nie ma spraw pozastudenckich do zalatwienia
                 
-                    if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
+                    if(mojModel.otwarty)//to sprawdzamy czy czasem nie iść już do domu, jeśli nie to:
                     {
-			
-			okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
-			WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
-			event.schedule(okno, new SimTime(0.0));//wywoluje studenta od razu bo nie ma juz spraw do zalatwienia
-                    }
-                    else {
-                        //nie ma nic absolutnie do roboty
-			mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        if (!mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).isEmpty())
+                        {
+
+                            okno.setAktualnyStudent(mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first());
+                            WywolanieStudentaEvent event = new WywolanieStudentaEvent(mojModel, "Wywolanie studenta do " + mojModel.getWolneOkienkaKierunku(okno.getKierunek()).getName(), true);		
+                            event.schedule(okno, new SimTime(0.0));//wywoluje studenta od razu bo nie ma juz spraw do zalatwienia
+                        }
+                        else {
+                            //nie ma nic absolutnie do roboty
+                            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                        }
                     }
                 }
                 

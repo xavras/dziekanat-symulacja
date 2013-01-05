@@ -44,14 +44,21 @@ public class StudentGeneratorEvent extends ExternalEvent {
 	public void eventRoutine() {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
-                if(przychodzacyStudent == null)//jeśli pojawia się nowy student
+                if(mojModel.otwarty)
                 {
-                    mojModel.getPodajnikBloczkow().dodajStudenta(new Student(mojModel, "Student", true));
-                    schedule(new SimTime(mojModel.getCzasPrzybyciaStudenta()));
+                    if(przychodzacyStudent == null)//jeśli pojawia się nowy student
+                    {
+                        mojModel.getPodajnikBloczkow().dodajStudenta(new Student(mojModel, "Student", true));
+                        schedule(new SimTime(mojModel.getCzasPrzybyciaStudenta()));
+                    }
+                    else//student przychodzi kolejny raz, wywołany został konstruktor ze studentem
+                    {
+                        mojModel.getPodajnikBloczkow().dodajStudenta(przychodzacyStudent);
+                    }
                 }
-                else//student przychodzi kolejny raz, wywołany został konstruktor ze studentem
+                else
                 {
-                    mojModel.getPodajnikBloczkow().dodajStudenta(przychodzacyStudent);
+                    mojModel.podajnikBloczkow.wyslijTrace("Czas sie skonczyl, zaden student juz dzisiaj sie nie wygeneruje");
                 }
 	}
 }

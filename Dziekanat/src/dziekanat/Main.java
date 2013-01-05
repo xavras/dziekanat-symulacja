@@ -19,7 +19,8 @@ public class Main {
 		Experiment exp = new Experiment("Symulacja pracy dziakanatu");
 		model.connectToExperiment(exp);
 
-                double czasSymulacji = 60.0*(0.5+Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia);
+                //5 dni * (godzinyPracy+0.5h)
+                double czasSymulacji = 5*60.0*(0.5+Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia);
                 
 		exp.setShowProgressBar(true);
 		exp.stop(new SimTime(czasSymulacji));

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import symulacja.dziekan.Dziekan;
 import symulacja.dziekan.DziekanPrzyjscieEvent;
+import symulacja.praca_dzienna.OtwarcieDziekanatuEvent;
 import symulacja.student_do_dziekana.StudentDoDziekana;
 import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
 
@@ -54,6 +55,7 @@ public class Dziekanat extends Model {
     
     //alternatywna wersja, trochę chyba prostsza
     public ListaPodan listaPodan;
+    public boolean otwarty = false;
       
     public Queue<StudentDoDziekana> kolejkaDziekan;
     public Dziekan dziekan;
@@ -93,17 +95,9 @@ public class Dziekanat extends Model {
 	 * Uruchamia zdarzenie generatora studentow
 	 */
 	public void doInitialSchedules() {
-		StudentGeneratorEvent generatorStudentow = new StudentGeneratorEvent(this, "StudentGenerator", true);
-		generatorStudentow.schedule(new SimTime(0.0));
-                
-                SprawyPozastudenckieGeneratorEvent generatorSpraw = new SprawyPozastudenckieGeneratorEvent(this,"PetentGenerator", true);
-                generatorSpraw.schedule(new SimTime(0.0));
-                
-                StudentDoDziekanaGeneratorEvent generatorDziekan = new StudentDoDziekanaGeneratorEvent(this, "StudentDoDziekanaGen", true);
-                generatorDziekan.schedule(new SimTime(0.0));
-                
-                DziekanPrzyjscieEvent przyjscieDziekana = new DziekanPrzyjscieEvent(this, "Przyjscie Dziekana", true);
-                przyjscieDziekana.schedule(dziekan, new SimTime((Dziekan.godzinaRozpoczecia-Dziekanat.godzinaOtwarcia)*60.0));
+            
+                OtwarcieDziekanatuEvent openTheDoors = new OtwarcieDziekanatuEvent(this, "Otwieramy Dziekanat", true);
+                openTheDoors.schedule(new SimTime(0.0));
                 
                 podaniaLista = new LinkedList();
                 gotowePodaniaLista = new LinkedList();
@@ -305,6 +299,14 @@ public class Dziekanat extends Model {
             return teraz;
         }
         
+        public double dzienTeraz(){
+            double czasTeraz = this.currentTime().getTimeValue();
+            double czasDnia = Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia+0.5;
+            double wsp = Math.floor(czasTeraz/(czasDnia*60.0));
+            //wsp+1 - ktory mamy dzien
+            return (int)(wsp+1);
+        }
+        
         public String czasTeraz()
         {
             double czasTeraz = this.currentTime().getTimeValue();
@@ -320,6 +322,15 @@ public class Dziekanat extends Model {
             ret+=":";
             if(min<10)ret+="0"+(int)min;
             else ret += (int)min;
+            ret = "dzien "+(int)(wsp+1)+", "+ret;
             return ret;
+        }
+        
+        public void wyslijTracePracownikom(String note)
+        {
+            for(int i=0; i<okienka.size(); i++)
+            {
+                okienka.get(i).wyslijTrace(note);
+            }
         }
 } 
