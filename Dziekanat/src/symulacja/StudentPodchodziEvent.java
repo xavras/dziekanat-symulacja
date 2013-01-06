@@ -29,6 +29,12 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		Student student = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).removeFirst();
 		
+                if(!mojModel.otwarty || (student == null))//koniec pracy
+                {
+                    mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                    return;
+                }
+                
 		okno.wyslijTrace("Przyjmuje studenta: " + okno.getAktualnyStudent().getId());
 
                 //wygeneruj odpowiedni czas obsługi; 

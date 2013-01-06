@@ -66,11 +66,13 @@ public class ZajmijSieSprawaPozastudenckaEvent extends Event<PracownikDziekanatu
                         else {
                             //nie ma nic absolutnie do roboty
                             mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                            okno.wyslijTrace("Nie mam nic do roboty.");
                         }
                     }
                     else {//wracam do domu
                             //nie ma nic absolutnie do roboty
                             mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                            okno.wyslijTrace("Wracam juz do domu.");
                         }
                 }
                 

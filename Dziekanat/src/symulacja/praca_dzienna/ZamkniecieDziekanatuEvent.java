@@ -10,6 +10,7 @@ import desmoj.core.simulator.SimTime;
 import symulacja.Automat;
 import symulacja.Dziekanat;
 import symulacja.SprawyPozastudenckieGeneratorEvent;
+import symulacja.Student;
 import symulacja.StudentGeneratorEvent;
 import symulacja.dziekan.Dziekan;
 import symulacja.dziekan.DziekanPrzyjscieEvent;
@@ -34,8 +35,8 @@ import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
                 {
                     Automat.licznikStudentowZKierunku[i] = 0;
                 }
-                
-                mojModel.kolejkaDziekan.removeAll();
+                Student.licznikDziennyStudentow = 0;
+
                 mojModel.wyczyscKolejkeStudentow();
                 
                 //otwieramy za pół godziny (czyli nowy dzień)

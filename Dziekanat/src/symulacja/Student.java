@@ -21,6 +21,7 @@ public class Student extends Entity {
         int numer; //numer na bloczku z automatu
         
         int sprawa; //0-pytanie 1-zlozenia podania 2-odbior podania
+        public static int licznikDziennyStudentow = 0;
         
         
         
@@ -44,6 +45,7 @@ public class Student extends Entity {
                         czasTolerancji = rand.nextInt(Dziekanat.getLimitTolerancjiStudentow()); //w minutach
                         id = licznikStudentow;
                         licznikStudentow++;
+                        licznikDziennyStudentow++;
                         
                         sprawa = rand.nextInt(2); //poczatkowo moze miec tylko wart 0 lub 1, nie moze miec 2 bo zeby odebrac podanie najpierw musi je zlozyc
 	        
@@ -153,5 +155,11 @@ public class Student extends Entity {
             double losowaGodzina = random.nextDouble()*czasPracy;
             
             return (losowaGodzina + doKoncaDnia + 0.5)*60.0; //dodaję 0.5 przerwy między dniami
+        }
+        
+        public void zwiekszDeterminacje()
+        {
+            if(czasPodchodzeniaStudenta>10) czasPodchodzeniaStudenta-=10;
+            czasTolerancji+=10;
         }
 }

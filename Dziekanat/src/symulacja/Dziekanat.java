@@ -14,6 +14,7 @@ import symulacja.dziekan.DziekanPrzyjscieEvent;
 import symulacja.praca_dzienna.OtwarcieDziekanatuEvent;
 import symulacja.student_do_dziekana.StudentDoDziekana;
 import symulacja.student_do_dziekana.StudentDoDziekanaGeneratorEvent;
+import symulacja.student_do_dziekana.StudentDoDziekanaPrzyjscieEvent;
 
 /**
  * To jest klasa z modelem Urzedu Miasta. Jest to glowna klasa modelu zdarzeniowego.
@@ -33,7 +34,7 @@ public class Dziekanat extends Model {
     protected static double czasPrzybyciaStudentaDouble = 3;
         
     protected RealDistExponential czasNowejSprawyPozastudenckiej;
-    protected static double czasNowejSprawyPozastudenckiejDouble = 5;
+    protected static double czasNowejSprawyPozastudenckiejDouble = 30;
     
     protected RealDistExponential czasTrwaniaPrzerwy;
     protected static double czasTrwaniaPrzerwyDouble = 5;
@@ -341,7 +342,17 @@ public class Dziekanat extends Model {
         {
             for(int i=0; i<studentKolejka.length; i++)
             {
-                studentKolejka[i].removeAll();
+                for(;studentKolejka[i].length()>0;)
+                {
+                    Student student = studentKolejka[i].removeFirst();
+                    StudentGeneratorEvent SGevent = new StudentGeneratorEvent(this, "StudentGenerator: student wraca", true, student);
+                    //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                    double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                    student.wyslijTrace("Koniec pracy dziekanatu, wyrzucaja mnie z budynku.");
+                    student.wyslijTrace("Przyjde ponownie: "+this.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                            kiedyPrzyjdzie + ")");
+                    SGevent.schedule(new SimTime(kiedyPrzyjdzie));
+                }
             }
         }
         
@@ -374,5 +385,20 @@ public class Dziekanat extends Model {
             else ret += (int)min;
             ret = "dzien "+(int)(wsp+1)+", "+ret;
             return ret;
+        }
+        
+        public void wyczyscKolejkeStudentowDziekana()
+        {
+            for(int i=0; i<kolejkaDziekan.length(); i++)
+            {
+                    StudentDoDziekana student = kolejkaDziekan.removeFirst();
+                    StudentDoDziekanaPrzyjscieEvent SGevent = new StudentDoDziekanaPrzyjscieEvent(this, "Student wraca", true);
+                    //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                    double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                    student.wyslijTrace("Koniec pracy dziekana, wyrzucaja mnie z budynku.");
+                    student.wyslijTrace("Przyjde ponownie: "+this.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                            kiedyPrzyjdzie + ")");
+                    SGevent.schedule(student, new SimTime(kiedyPrzyjdzie));
+            }
         }
 } 

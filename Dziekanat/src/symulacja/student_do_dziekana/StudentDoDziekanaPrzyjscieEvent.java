@@ -25,6 +25,23 @@ public class StudentDoDziekanaPrzyjscieEvent extends Event<StudentDoDziekana>{
         Dziekanat mojModel = (Dziekanat)getModel();
         
         student.wyslijTrace("Przyszedlem do dziekana");
+        
+        //sprawdzam czy kolejka nie jest za dluga
+        if(((Dziekanat)getModel()).kolejkaDziekan.length() > student.getDlugoscKolejkiTolerancja())
+        {
+            student.wyslijTrace("Kolejka jest za dluga, nie chce mi sie czekac. Przyjde kiedy indziej.");
+            student.wyslijTrace("Musze poczekac. Dlugosc kolejki: "
+                    +((Dziekanat)getModel()).kolejkaDziekan.length());
+            student.zwiekszDeterminacje();
+            StudentDoDziekanaPrzyjscieEvent SGevent = new StudentDoDziekanaPrzyjscieEvent(getModel(), "Student wraca", true);
+            double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+            student.wyslijTrace("Przyjde ponownie: "+((Dziekanat)getModel()).getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                    kiedyPrzyjdzie + ")");
+            SGevent.schedule(student, new SimTime(kiedyPrzyjdzie));
+            return;
+        }
+        
+        student.setCzasPrzyjscia(mojModel.currentTime().getTimeValue());
         mojModel.kolejkaDziekan.insert(student);
                     
         if(mojModel.kolejkaDziekan.isEmpty() && mojModel.dziekan.isObecny() 
@@ -35,7 +52,7 @@ public class StudentDoDziekanaPrzyjscieEvent extends Event<StudentDoDziekana>{
             dziekanObsluga.schedule(mojModel.dziekan, new SimTime(StudentDoDziekana.czasPodchodzenia));
             student.wyslijTrace("Wszedlem od razu, bez kolejki");
         }
-        else
+        else//ktos jest w kolejce
         {
             student.wyslijTrace("Musze poczekac. Dlugosc kolejki: "
                     +((Dziekanat)getModel()).kolejkaDziekan.length());

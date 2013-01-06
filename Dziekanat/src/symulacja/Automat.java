@@ -13,8 +13,8 @@ import desmoj.core.simulator.SimTime;
 public class Automat extends Entity {
         public final static int iloscKierunkow = 4;
     
-	protected final int maxStudentow = 50;
-        protected static int maxStudentowKierunek = 20;
+	protected final int maxStudentow = 80;
+        protected static int maxStudentowKierunek = 50;
 	protected HTMLTraceOutput trace = new HTMLTraceOutput();
 	//licznik petentow do okienek: 0 - Elektrotechnika 1 - AiR  2 - Stosowana 3 - Inż. Biomedyczna
 	public static int licznikStudentowZKierunku[] = new int[iloscKierunkow];
@@ -40,10 +40,10 @@ public class Automat extends Entity {
 		student.wyslijTrace("Przyszedlem o: " + presentTime());
 		
                 //zapisz czas przybycia
-                student.setCzasPrzybycia(presentTime().getTimeAsDouble());
+                student.setCzasPrzybycia(mojModel.presentTime().getTimeAsDouble());
                 
 		//sprawdzenie czy Urzad moze jeszcze przyjac petentow
-		if (student.getLicznikPetentow() < maxStudentow*mojModel.dzienTeraz()){
+		if (student.licznikDziennyStudentow < maxStudentow){
 			
 			//sprawdzenie czy dane okienko moze jeszcze przyjac studentow
 			if (licznikStudentowZKierunku[student.getKierunek()] < maxStudentowKierunek){
@@ -58,11 +58,23 @@ public class Automat extends Entity {
 				przybycieStudenta.schedule(student, new SimTime(0.0));
 			}else{
 				student.wyslijTrace("Przekroczona liczba studentow do obslugi przez tego pracownika dzisiaj");
-				student.zamknijTrace();
+				//student.zamknijTrace();
+                                StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                                //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                                double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                                student.wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                                        kiedyPrzyjdzie + ")");
+                                SGevent.schedule(new SimTime(kiedyPrzyjdzie));
 			}			
 		}else{
 			student.wyslijTrace("Dziekanat dzisiaj juz nikogo nie przyjmuje");
-			student.zamknijTrace();
+			//student.zamknijTrace();
+                        StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                        //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                        double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                        student.wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                                kiedyPrzyjdzie + ")");
+                        SGevent.schedule(new SimTime(kiedyPrzyjdzie));
 		}
 	}
 	/**

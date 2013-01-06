@@ -31,6 +31,12 @@ public class PowtorneWywolanieEvent extends Event<PracownikDziekanatu> {
         Student p = mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).first();
         mojModel.getPodajnikBloczkow().wyslijTrace(okno.getAktualnyStudent().getNumer() + " numer ponownie proszony do okienka: " + okno.getName());    
         
+        if(!mojModel.otwarty || (p == null))//koniec pracy
+        {
+            mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+            return;
+        }
+        
         // czy student sobie nie poszedl?
                 
                 double obecnyCzas = presentTime().getTimeAsDouble();
@@ -49,12 +55,26 @@ public class PowtorneWywolanieEvent extends Event<PracownikDziekanatu> {
                 //przyczyna odejscia
         	if(czyJeszczeJest ==true){
                     okno.getAktualnyStudent().wyslijTrace("poszedlem sobie: za dlugo podchodzilem");
+                    okno.getAktualnyStudent().zwiekszDeterminacje();
+                    StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, okno.getAktualnyStudent());
+                    //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                    double kiedyPrzyjdzie = okno.getAktualnyStudent().getScheduleKolejnegoDnia();
+                    okno.getAktualnyStudent().wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                            kiedyPrzyjdzie + ")");
+                    SGevent.schedule(new SimTime(kiedyPrzyjdzie));
                 }
                 else{
                     okno.getAktualnyStudent().wyslijTrace("poszedlem sobie: przekroczono tolerancje...");
+                    okno.getAktualnyStudent().zwiekszDeterminacje();
+                    StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, okno.getAktualnyStudent());
+                    //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                    double kiedyPrzyjdzie = okno.getAktualnyStudent().getScheduleKolejnegoDnia();
+                    okno.getAktualnyStudent().wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                            kiedyPrzyjdzie + ")");
+                    SGevent.schedule(new SimTime(kiedyPrzyjdzie));
                     
                 }
-        	okno.getAktualnyStudent().zamknijTrace();
+        	//okno.getAktualnyStudent().zamknijTrace();
         	
         	mojModel.getPetentKolejkaDoKierunku(okno.getKierunek()).removeFirst();
         	okno.setAktualnyStudent(null);

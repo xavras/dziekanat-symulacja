@@ -22,6 +22,7 @@ public class StudentDoDziekana extends Entity{
     private int id;
     public static double czasPodchodzenia = 0.5;
     public static double czasGeneracji = 4.0;
+    private double czasPrzyjscia;
     
     protected HTMLTraceOutput trace = new HTMLTraceOutput();
     
@@ -30,8 +31,8 @@ public class StudentDoDziekana extends Entity{
         super(wlasciciel, nazwa, pokazTrace);
         
         Random random = new Random();
-        dlugoscKolejkiTolerancja = random.nextInt(10);
-        czasTolerancji = random.nextInt(30);//w minutach
+        dlugoscKolejkiTolerancja = random.nextInt(10)+5;
+        czasTolerancji = random.nextInt(30)+5;//w minutach
         id = licznikStudentow++;
         
         new File("traces/StudenciDziekan").mkdir();
@@ -80,5 +81,19 @@ public class StudentDoDziekana extends Entity{
 
         return (losowaGodzina + doKoncaDnia + 0.5)*60.0;
         //dodaję 0.5 przerwy między dniami
+    }
+
+    public double getCzasPrzyjscia() {
+        return czasPrzyjscia;
+    }
+
+    public void setCzasPrzyjscia(double czasPrzyjscia) {
+        this.czasPrzyjscia = czasPrzyjscia;
+    }
+    
+    public void zwiekszDeterminacje()
+    {
+        dlugoscKolejkiTolerancja+=5;
+        czasTolerancji+=10;
     }
 }

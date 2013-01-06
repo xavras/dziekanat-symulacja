@@ -34,6 +34,12 @@ public class WywolanieStudentaEvent extends Event<PracownikDziekanatu> {
 		mojModel.getPodajnikBloczkow().wyslijTrace(okno.getAktualnyStudent().getNumer() + " numer proszony do okienka: " + okno.getName());        
                 okno.setAktualnyStudent(student);
         
+                if(!mojModel.otwarty || (student == null))//koniec pracy
+                {
+                    mojModel.getWolneOkienkaKierunku(okno.getKierunek()).insert(okno);
+                    return;
+                }
+                
                 // czy student sobie nie poszedl?
                 
                 double obecnyCzas = presentTime().getTimeAsDouble();

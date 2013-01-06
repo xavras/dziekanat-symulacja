@@ -28,8 +28,7 @@ public class DziekanWyjscieEvent extends Event<Dziekan>{
         
         dziekan.setObecny(false);
         
-        model.kolejkaDziekan.removeAll();//TODO: żeby każdy ze studentów przyszedl w inny dzien
-        //TODO: ustawienie przyjscia dziekana w kolejny dzień
+        model.wyczyscKolejkeStudentowDziekana();
     }
 }
 
