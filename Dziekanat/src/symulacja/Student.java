@@ -142,4 +142,16 @@ public class Student extends Entity {
         public void zamknijTrace(){
         	trace.close();
         }
+        
+        public double getScheduleKolejnegoDnia()
+        {
+            Random random = new Random();
+            double godzTeraz = ((Dziekanat)getModel()).godzinaTeraz();
+            double doKoncaDnia = Dziekanat.godzinaZamkniecia - godzTeraz;
+            double czasPracy = Dziekanat.godzinaZamkniecia - Dziekanat.godzinaOtwarcia;
+            
+            double losowaGodzina = random.nextDouble()*czasPracy;
+            
+            return (losowaGodzina + doKoncaDnia + 0.5)*60.0; //dodaję 0.5 przerwy między dniami
+        }
 }

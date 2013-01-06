@@ -9,6 +9,7 @@ import desmoj.core.report.TraceNote;
 import desmoj.core.simulator.*;
 import java.io.File;
 import symulacja.Dziekanat;
+import symulacja.dziekan.Dziekan;
 /**
  *
  * @author lukasz
@@ -67,5 +68,17 @@ public class StudentDoDziekana extends Entity{
         return id;
     }
     
-    
+    public double getScheduleKolejnegoDnia()
+    {
+        Random random = new Random();
+        double godzTeraz = ((Dziekanat)getModel()).godzinaTeraz();
+        double doKoncaDnia = Dziekanat.godzinaZamkniecia - godzTeraz;
+        double czasPracy = Dziekan.godzinaZakonczenia - Dziekanat.godzinaOtwarcia;
+        //mozna przyjsc wczesniej i czekac na dziekana
+        
+        double losowaGodzina = random.nextDouble()*czasPracy;
+
+        return (losowaGodzina + doKoncaDnia + 0.5)*60.0;
+        //dodaję 0.5 przerwy między dniami
+    }
 }

@@ -30,7 +30,7 @@ public class Dziekanat extends Model {
     protected static int NUM_OK_IS = 1;
     protected static int NUM_OK_IB = 1;
     protected RealDistExponential czasPrzybyciaStudenta;
-    protected static double czasPrzybyciaStudentaDouble = 5;
+    protected static double czasPrzybyciaStudentaDouble = 3;
         
     protected RealDistExponential czasNowejSprawyPozastudenckiej;
     protected static double czasNowejSprawyPozastudenckiejDouble = 5;
@@ -354,6 +354,25 @@ public class Dziekanat extends Model {
                         wolneOkienka[i].length() + "<br />";
             }
             
+            return ret;
+        }
+        
+        public String getCzasPoSchedule(double schedule)
+        {
+            double czasTeraz = this.currentTime().getTimeValue() + schedule;
+            double czasDnia = Dziekanat.godzinaZamkniecia-Dziekanat.godzinaOtwarcia+0.5;
+            double wsp = Math.floor(czasTeraz/(czasDnia*60.0));
+            //wsp+1 - ktory mamy dzien
+            double teraz = (czasTeraz-wsp*czasDnia*60.0)+Dziekanat.godzinaOtwarcia*60.0;
+            double godz = Math.floor(teraz/60.0);
+            double min = (teraz-godz*60.0);
+            String ret = "";
+            if(godz<10)ret+="0"+(int)godz;
+            else ret += (int)godz;
+            ret+=":";
+            if(min<10)ret+="0"+(int)min;
+            else ret += (int)min;
+            ret = "dzien "+(int)(wsp+1)+", "+ret;
             return ret;
         }
 } 

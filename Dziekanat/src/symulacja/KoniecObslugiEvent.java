@@ -29,7 +29,7 @@ public class KoniecObslugiEvent extends Event<PracownikDziekanatu> {
 		Dziekanat mojModel = (Dziekanat)getModel();
 		
 		okno.getAktualnyStudent().wyslijTrace("Odszedlem o:" + presentTime());
-		okno.getAktualnyStudent().zamknijTrace();
+		//okno.getAktualnyStudent().zamknijTrace();
 		
 		okno.wyslijTrace("Student: " + okno.getAktualnyStudent().getId() + " odszedl");
 		okno.setAktualnyStudent(null);

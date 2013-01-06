@@ -54,6 +54,7 @@ public class StudentGeneratorEvent extends ExternalEvent {
                     else//student przychodzi kolejny raz, wywołany został konstruktor ze studentem
                     {
                         mojModel.getPodajnikBloczkow().dodajStudenta(przychodzacyStudent);
+                        przychodzacyStudent.wyslijTrace("Przyszedlem ponownie, jest: "+mojModel.czasTeraz());
                     }
                 }
                 else

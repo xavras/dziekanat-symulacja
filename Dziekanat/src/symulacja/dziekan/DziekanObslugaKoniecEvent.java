@@ -41,10 +41,12 @@ public class DziekanObslugaKoniecEvent extends Event<Dziekan>{
             dziekan.wyslijTrace("Odmawiam studentowi");
             dziekan.aktualnyStudent.wyslijTrace("Dziekan sie nie zgodzil, przyjde jeszcze raz");
             
-            //TODO: podchodzenie studenta po raz kolejny (timing)
-            /*StudentDoDziekanaPrzyjscieEvent event = 
+            double kiedyPrzyjdzie = dziekan.aktualnyStudent.getScheduleKolejnegoDnia();
+            dziekan.aktualnyStudent.wyslijTrace("Przyjde : " + model.getCzasPoSchedule(kiedyPrzyjdzie));
+            
+            StudentDoDziekanaPrzyjscieEvent event = 
                     new StudentDoDziekanaPrzyjscieEvent(getModel(), getModel().getName(), traceIsOn());
-            event.schedule(dziekan.aktualnyStudent, new SimTime(//TODO));*/
+            event.schedule(dziekan.aktualnyStudent, new SimTime(kiedyPrzyjdzie));
         }
         dziekan.aktualnyStudent = null;
         

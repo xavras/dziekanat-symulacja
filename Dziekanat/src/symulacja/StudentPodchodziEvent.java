@@ -50,8 +50,14 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                             student.wyslijTrace("zlozylem podanie");
                         
                             //TO DO: Event ze wraca
-                            StudentGeneratorEvent event = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
-                            event.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                            //StudentGeneratorEvent event = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                            //event.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                            StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                            //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                            double kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                            student.wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                                    kiedyPrzyjdzie + ")");
+                            SGevent.schedule(new SimTime(kiedyPrzyjdzie));
                             
                         break;
                     case 2: //sprawdzenie czy podanie jest podpisane
@@ -64,8 +70,12 @@ public class StudentPodchodziEvent extends Event<PracownikDziekanatu> {
                                 //musi wrocic jeszcze raz 
                                 student.wyslijTrace("nie odebralem podania, wroce jeszcze raz");
                                 //TO DO: Event ze wraca
-                                 StudentGeneratorEvent SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
-                                 SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                                 SGevent = new StudentGeneratorEvent(mojModel, "StudentGenerator: student wraca", true, student);
+                                 //SGevent.schedule(new SimTime(presentTime().getTimeAsDouble()+4*60)); //4*60 czyli 4h-> student wraca po 1 dniu. 
+                                 kiedyPrzyjdzie = student.getScheduleKolejnegoDnia();
+                                 student.wyslijTrace("Przyjde ponownie: "+mojModel.getCzasPoSchedule(kiedyPrzyjdzie) + " (" + 
+                                    kiedyPrzyjdzie + ")");
+                                 SGevent.schedule(new SimTime(kiedyPrzyjdzie));
                                  
                             }
                         break;
